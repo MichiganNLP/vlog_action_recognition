@@ -31,6 +31,7 @@ For each miniclip, we store the __extracted actions__ and their corresponding __
 * 0 for __visible__
 * 1 for __not visible__.
 
+The visibile actions were manually cleaned by removing extra words like: usually, now, always, I, you, etc.
 Example format in JSON:
 
 ```json
