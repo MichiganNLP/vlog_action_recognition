@@ -56,7 +56,7 @@ Example format in JSON:
 Please cite the following paper if you find this dataset useful in your research:
 
 ```tex
-@inproceedings{mustard,
+@inproceedings{ignat2019identifying,
     title = "Identifying Visible Actions in Lifestyle Vlogs",
     author = "Ignat, Oana and Burdick, Laura and Deng, Jia and Mihalcea, Rada",
     booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
@@ -69,4 +69,4 @@ Please cite the following paper if you find this dataset useful in your research
 
 ## Run the code
 
-TODO
+Will be ready soon!
