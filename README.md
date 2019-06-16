@@ -36,20 +36,18 @@ Example format in JSON:
 ```json
 {
   "4p1_3mini_5": [
-                    ["smelled it", 1],
-                    ["used this in my last pudding video", 1],
-                    ["make it smell nice", 0],
-                    ["loving them", 1],
-                    ["using them about a week", 1],
-                    ["using my favorite cleaner which", 0],
-                    ["work really really well", 1],
-                    ["wipe down my counters", 0],
-                    ["wiping down my barstools i", 0],
-                    ["using the car shammies that i", 0]
-    ]
+    ["smelled it", 1],
+    ["used this in my last pudding video", 1],
+    ["make it smell nice", 0],
+    ["loving them", 1],
+    ["using them about a week", 1],
+    ["using my favorite cleaner which", 0],
+    ["work really really well", 1],
+    ["wipe down my counters", 0],
+    ["wiping down my barstools i", 0],
+    ["using the car shammies that i", 0]
+  ] 
 }
-
-
 ```
 ## Citation
 
