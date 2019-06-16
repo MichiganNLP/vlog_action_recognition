@@ -24,6 +24,7 @@ For "4p1_3mini_5.mp4":
 * 3 = video index in the playlist
 * mini_5 = miniclip index in the video
 
+For each miniclip we store the extracted actions and their corresponding labels: 0 for visible and 1 for not visible.
 Example format in json:
 
 ```json
@@ -42,7 +43,6 @@ Example format in json:
     ]
 }
 
-For each miniclip we store actions and their corresponding labels: 0 for visible and 1 for not visible.
 
 ```
 ## Citation
