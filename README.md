@@ -4,8 +4,12 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 [Identifying Visible Actions in Lifestyle Vlogs](https://arxiv.org/abs/1906.04236)
 
-## Example Instance
+## Task Description
 
+![Example instance](images/task_description.jpg)
+<p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
+
+## Example Instance
 
 ## Raw Videos
 
