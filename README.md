@@ -10,9 +10,10 @@ This repository contains the dataset and code for our ACL 2019 paper:
 <p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
 
 
-## Raw Videos
-
-We provide a [Google Drive folder with the raw video miniclips](https://drive.google.com/drive/folders/1JJApVcu5o_zvtL3M0Y9a1sAiJCVTPQ6z?usp=sharing),
+## Raw Miniclips
+A miniclip is a short video clip (maximum 1 min) extracted from a YouTube video. We segment the videos into miniclips in order to ease the annotation process.
+For more details on how the segmentation is performed, see _section 3.1_ in our [paper](https://arxiv.org/abs/1906.04236).
+We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/drive/folders/1JJApVcu5o_zvtL3M0Y9a1sAiJCVTPQ6z?usp=sharing).
 
 ## Data Format
 The annotations of the miniclips are available at [`data/miniclip_action.json`](data/actions_miniclip.json).
