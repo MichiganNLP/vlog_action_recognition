@@ -24,11 +24,11 @@ The miniclip name is formed by concatenating its YouTube channel, playlist (0 or
 * 3 = video index in the playlist
 * mini_5 = miniclip index in the video
 
-For each miniclip, we store the extracted actions and their corresponding labels:
-* 0 for visible
-* 1 for not visible.
+For each _miniclip_, we store the _extracted actions_ and their corresponding _labels_:
+* 0 for _visible_
+* 1 for _not visible_.
 
-Example format in json:
+Example format in JSON:
 
 ```json
 {
