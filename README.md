@@ -6,8 +6,9 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 ## Task Description
 
-![Example instance](images/task_description.jpg)
 <p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
+
+![Example instance](images/task_description.pdf)
 
 ## Example Instance
 
