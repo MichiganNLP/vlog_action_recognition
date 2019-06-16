@@ -8,12 +8,7 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 <p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
 
-
-<object data="images/task_description.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="images/task_description.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="images/task_description.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+![Example instance](images/task_description.jpg)
 
 
 ## Example Instance
