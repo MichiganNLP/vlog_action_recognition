@@ -17,14 +17,17 @@ We provide a [Google Drive folder with the raw video miniclips](https://drive.go
 ## Data Format
 The annotations of the miniclips are available at [`data/miniclip_action.json`](data/actions_miniclip.json).
 The JSON file contains a dictionary: the keys represent the miniclips (e.g. "4p1_3mini_5.mp4") and the values represent the (action, label) pairs.
-The miniclip name is formed by concatenating its YouTube channel, playlist (0 or 1), video and miniclip index:
-For "4p1_3mini_5.mp4":
+
+The miniclip name is formed by concatenating its YouTube channel, playlist (0 or 1), video and miniclip index. For miniclip "4p1_3mini_5.mp4":
 * 4 = channel index
 * p1 = playlist index (0 or 1) in the channel
 * 3 = video index in the playlist
 * mini_5 = miniclip index in the video
 
-For each miniclip we store the extracted actions and their corresponding labels: 0 for visible and 1 for not visible.
+For each miniclip, we store the extracted actions and their corresponding labels:
+* 0 for visible
+* 1 for not visible.
+
 Example format in json:
 
 ```json
