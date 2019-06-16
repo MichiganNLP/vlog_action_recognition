@@ -8,7 +8,7 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 <img src="images/task_description.jpg" width="90%">
 
-<p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
+<p align="left"> Given a video and its transcript, which human actions are visible in the video? </p>
 
 
 ## Example Instance
