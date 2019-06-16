@@ -6,7 +6,7 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 ## Task Description
 
-<img src="images/task_description.jpg" width="40%">
+<img src="images/task_description.jpg" width="80%">
 
 <p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
 
