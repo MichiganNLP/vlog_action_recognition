@@ -115,7 +115,8 @@ python main_classify.py --do-classify lstm
 
 #### Extra data
 You can find the **context** information for each action in [`data/dict_context.json`](data/dict_context.json): each action is assigned the sentence it is extracted from.
-The sentences are extracted from the Youtube transcripts, using the Stanford Parser.\
+The sentences are extracted from the Youtube transcripts, using the **Stanford Parser**.\
+
 You can find both the **POS** and **context embeddings** in [`data/Embeddings`](data/Embeddings). They consist of averaging the surrounding 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
 
 The **concreteness** dataset from Brysbaert et al. can be find in [`data`](data/) folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in [`data/dict_all_concreteness.json`](data/dict_all_concreteness.json).
