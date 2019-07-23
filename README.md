@@ -119,7 +119,7 @@ The sentences are extracted from the Youtube transcripts, using the **Stanford P
 
 You can find both the **POS** and **context embeddings** in [`data/Embeddings`](data/Embeddings). They consist of averaging the surrounding 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
 
-The **concreteness** dataset from Brysbaert et al. can be find in [`data`](data/) folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in [`data/dict_all_concreteness.json`](data/dict_all_concreteness.json).
+The **concreteness** dataset from `Brysbaert et al.` can be find in [`data`](data/) folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in [`data/dict_all_concreteness.json`](data/dict_all_concreteness.json).
 
 The **concreteness and POS** of all the overlapping words in the *test set* actions from our dataset is stored in [`data/dict_test_action_pos_concreteness.json`](data/dict_test_action_pos_concreteness.json) (I will add the *train* and *val* very soon).
 
