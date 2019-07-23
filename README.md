@@ -10,7 +10,7 @@ This repository contains the dataset and code for our ACL 2019 paper:
 <p align="center"> Given a video and its transcript, which human actions are visible in the video? </p>
 
 
-## Raw Miniclips
+## Miniclips
 
 We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/file/d/1yi3hsLFyMTVlEo7o1Fo3mbI57elXXnuH/view?usp=sharing).
 
