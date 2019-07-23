@@ -114,7 +114,7 @@ python main_classify.py --do-classify lstm
 ```
 
 #### Extra data
-You can find the **context** information for each action in *data/dict_context.json*: each action is assigned the sentence it is extracted from.
+You can find the **context** information for each action in [`data/dict_context.json`](data/dict_context.json): each action is assigned the sentence it is extracted from.
 The sentences are extracted from the Youtube transcripts, using the Stanford Parser.\
 You can find both the **POS** and **context embeddings** in [`data/Embeddings`](data/Embeddings). They consist of averaging the surrounding 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
 
