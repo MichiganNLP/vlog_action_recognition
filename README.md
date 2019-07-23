@@ -82,7 +82,7 @@ sh setup.sh
 ## Data Requirements
 Download [glove_vectors.txt (pre-trained POS embeddings on Google N-gram corpus using POS info from 5-grams)](https://drive.google.com/open?id=1zSfeAKyPTuQMHOP53fPJDYqUqKs22tdJ).
 Download [glove.6B.50d.txt embeddings](https://drive.google.com/open?id=1TShifgw5OjUFYWZBnN5ez5uRijX5W3Ym).
-Put both of them in *data/*.
+Put both of them in [`data`](data).
 ## Usage
 There are 3 main modules: **Youtube processing**, **AMT processing** and **Classification**. The first 2 modules are still under revision. The third module can be used without the first 2 ones,
 as all the data is accessible from the *data* folder or *Google Drive*.
@@ -90,20 +90,20 @@ as all the data is accessible from the *data* folder or *Google Drive*.
 ### Youtube processing
 Need an youtube downloader API key.
 Given channel ids - *now 10*, and playlist ids for each channel ( 2 playlists / channel), it downloads all videos from each playlist.
-The code can be found in *youtube_preprocessing*.
+The code can be found in [`youtube_preprocessing`](youtube_preprocessing).
 
 ```bash
 python main_youtube.py
 ```
 
-### Amazon Mechanical Turk processing
-Does all processing related to AMT (read data, spam removal, compute agreement), the code is in *amt*.
+### Amazon Mechanical Turk (AMT) processing
+Does all processing related to AMT (read data, spam removal, compute agreement), the code is in [`amt`](amt).
 ```bash
 python main_amt.py
 ```
 
 ### Classification
-Everything related to classification models, embeddings and features can be found in *classify*.
+Everything related to classification models, embeddings and features can be found in [`classify`](classify).
 
 #### Models
 The available models are: *svm*, *lstm*, *elmo*, *multimodal: video features + elmo embeddings*.
@@ -116,11 +116,11 @@ python main_classify.py --do-classify lstm
 #### Extra data
 You can find the **context** information for each action in *data/dict_context.json*: each action is assigned the sentence it is extracted from.
 The sentences are extracted from the Youtube transcripts, using the Stanford Parser.\
-You can find both the **POS** and **context embeddings** in *data/Embeddings*. They consist of averaging the first 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
+You can find both the **POS** and **context embeddings** in [`data/Embeddings`](data/Embeddings). They consist of averaging the first 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
 
-The **concreteness** dataset from Brysbaert et al. can be find in *data* folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in *data/dict_all_concreteness.json*.
+The **concreteness** dataset from Brysbaert et al. can be find in [`data`](data/) folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in [`data/dict_all_concreteness.json`](data/dict_all_concreteness.json).
 
-The **concreteness and POS** of all the overlapping words in the *test set* actions from our dataset is stored in *data/dict_test_action_pos_concreteness.json* (I will add the *train* and *val* very soon).
+The **concreteness and POS** of all the overlapping words in the *test set* actions from our dataset is stored in [`data/dict_test_action_pos_concreteness.json`](data/dict_test_action_pos_concreteness.json) (I will add the *train* and *val* very soon).
 
 To add these **extra features** to your model: for example run *svm with context and pos embeddings*:
 
