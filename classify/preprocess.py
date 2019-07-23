@@ -280,19 +280,19 @@ def create_visual_features_matrices(train_miniclips, type_feat, avg_or_concatena
     nb_frames = 61
     if type_feat[0] == 'inception' or type_feat == 'inception':
         print("Using inception")
-        path_video_features = 'data/YOLO/Features/inception/'
+        path_video_features = 'data/Video/Features/inception/'
         dimension_output = 2048
     elif type_feat[0] == 'inception + c3d' or type_feat == 'inception + c3d':
         print("Using inception + c3d")
-        path_video_features = 'data/YOLO/Features/inception_c3d/'
+        path_video_features = 'data/Video/Features/inception_c3d/'
         dimension_output = 6144
     elif type_feat[0] == 'c3d' or type_feat == 'c3d':
         print("Using c3d")
-        path_video_features = 'data/YOLO/Features/c3d/'
+        path_video_features = 'data/Video/Features/c3d/'
         dimension_output = 4096
     else:
         print("Using default: inception + c3d")
-        path_video_features = 'data/YOLO/Features/inception_c3d/'
+        path_video_features = 'data/Video/Features/inception_c3d/'
         dimension_output = 6144
 
     index = 0
