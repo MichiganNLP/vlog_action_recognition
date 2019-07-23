@@ -29,8 +29,6 @@ def parse_args():
                                                                "/home/oignat/Research/Data/miniclips/"],
                         default="/local/oignat/miniclips/")
 
-    parser.add_argument('--model-name', type=str, choices=["c3d", "inceptionv3"], default="inceptionv3")
-
     parser.add_argument('--balance', type=str, choices=["upsample", "downsample", "unbalanced"], default="unbalanced")
 
     parser.add_argument('--do-classify', nargs='+',
@@ -39,9 +37,7 @@ def parse_args():
     parser.add_argument('--finetune', action='store_true')
     parser.add_argument('--do-extract-video-features', action='store_true')
 
-    parser.add_argument('--do-test-concat', action='store_true')
     parser.add_argument('--do-sample', action='store_true')
-    parser.add_argument('--do-test-c3d', action='store_true')
 
     parser.add_argument('--type-feat', nargs='+', choices=['inception', 'inception + c3d', 'c3d'],
                         default=['inception + c3d'])
