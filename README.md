@@ -80,8 +80,8 @@ sh setup.sh
 ```
 
 ## Data Requirements
-Download [glove_vectors.txt (pre-trained POS embeddings on Google N-gram corpus using POS info from 5-grams)](https://drive.google.com/file/d/1zSfeAKyPTuQMHOP53fPJDYqUqKs22tdJ/view?usp=sharing).
-Download [glove.6B.50d.txt embeddings](https://drive.google.com/file/d/1TShifgw5OjUFYWZBnN5ez5uRijX5W3Ym/view?usp=sharing).
+Download [glove_vectors.txt (pre-trained POS embeddings on Google N-gram corpus using POS info from 5-grams)](https://drive.google.com/open?id=1zSfeAKyPTuQMHOP53fPJDYqUqKs22tdJ).
+Download [glove.6B.50d.txt embeddings](https://drive.google.com/open?id=1TShifgw5OjUFYWZBnN5ez5uRijX5W3Ym).
 Put both of them in *data/*.
 ## Usage
 There are 3 main modules: **Youtube processing**, **AMT processing** and **Classification**. The first 2 modules are still under revision. The third module can be used without the first 2 ones,
@@ -134,8 +134,8 @@ python main_classify.py --do-classify multimodal --add-extra concreteness
 ```
 
 #### Video Features
-The video features are **Inception**, **C3D** and *their concatenation*. These are found in *data/Video/Features*. By default, the multimodal model is run with the concatenation of features:
-*inception + c3d*
+The video features are **Inception**, **C3D** and *their concatenation*. These are found in [`data/Video/Features`](data/Video/Features). By default, the multimodal model is run with the concatenation of features:
+*inception + c3d*.
 
 To run *multimodal with inception*:
 ```bash
@@ -143,7 +143,7 @@ python main_classify.py --do-classify multimodal --type-feat inception
 ```
 
 ##### YOLO output
-After running YOLOv3 object detector on all the miniclips, all the results are stored in *data/YOLO/miniclips_results*.
+After running YOLOv3 object detector on all the miniclips, all the results are stored [here](https://drive.google.com/file/d/11GrSXgvKIqVpyTB0UrXhliIM--IWElll/view?usp=sharing). Copy them in [`data/YOLO/miniclips_results`](data/YOLO/miniclips_results).
 
 For all of this data, there is code available to generate your own data also.
 

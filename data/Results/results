@@ -1,0 +1,37 @@
+| Method                                                     |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|------------------------------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced concreteness Noun & Verb max concreteness score |                0 |              0 |         0.65348 |      0.728064 |          0.76003 |  0.743704 |
+
+| Method         |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|----------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced SVM |         0.803828 |       0.760615 |        0.751127 |      0.926759 |         0.763441 |  0.837209 |
+
+| Method                    |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|---------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced SVM  + context |         0.866915 |       0.764275 |        0.772659 |      0.926759 |         0.783568 |  0.849169 |
+
+| Method                               |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|--------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced SVM  + ['pos', 'context'] |         0.888977 |       0.767936 |         0.77967 |      0.926759 |         0.790353 |  0.853138 |
+
+
+
+| Method          |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|-----------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced elmo |         0.849424 |        0.82297 |         0.78089 |      0.896676 |         0.807943 |      0.85 |
+
+| Method                                                |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|-------------------------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced elmo concat-text-video ['inception + c3d'] |         0.913818 |       0.811997 |        0.766383 |      0.781792 |         0.867682 |  0.822501 |
+
+| Method                                                          |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|-----------------------------------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced elmo concat-text-video ['inception + c3d'] + context |         0.898901 |       0.811127 |        0.777666 |      0.863669 |         0.823082 |  0.842887 |
+
+| Method                                          |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|-------------------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced elmo concat-text-video ['inception'] |         0.904074 |       0.818581 |        0.767384 |      0.820809 |         0.839616 |  0.830106 |
+
+| Method                                    |   Train Accuracy |   Val Accuracy |   Test Accuracy |   Test Recall |   Test Precision |   Test F1 |
+|-------------------------------------------+------------------+----------------+-----------------+---------------+------------------+-----------|
+| unbalanced elmo concat-text-video ['c3d'] |         0.883661 |       0.808199 |        0.766149 |      0.850616 |         0.817992 |  0.833985 |
