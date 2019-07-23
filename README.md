@@ -147,5 +147,5 @@ After running YOLOv3 object detector on all the miniclips, all the results are s
 
 For all of this data, there is code available to generate your own data also.
 
-Look in *main_classify.py* **parse_args** method for the rest of the models and data combinations.
+Look in [`main_classify.py`](main_classify.py) *parse_args* method for the rest of the models and data combinations.
 
