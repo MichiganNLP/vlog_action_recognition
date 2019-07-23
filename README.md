@@ -12,7 +12,7 @@ This repository contains the dataset and code for our ACL 2019 paper:
 
 ## Raw Miniclips
 
-We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/drive/folders/1JJApVcu5o_zvtL3M0Y9a1sAiJCVTPQ6z?usp=sharing).
+We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/file/d/1yi3hsLFyMTVlEo7o1Fo3mbI57elXXnuH/view?usp=sharing).
 
 A miniclip is a short video clip (maximum 1 min) extracted from a YouTube video. We segment the videos into miniclips in order to ease the annotation process.
 For more details on how the segmentation is performed, see _section 3.1_ in our [paper](https://arxiv.org/abs/1906.04236).
@@ -31,7 +31,7 @@ For each miniclip, we store the __extracted actions__ and their corresponding __
 * 0 for __visible__
 * 1 for __not visible__.
 
-The visibile actions were manually cleaned by removing extra words like: usually, now, always, I, you, etc.
+The visibile actions were manually cleaned by removing extra words like: usually, now, always, I, you, then etc.
 Example format in JSON:
 
 ```json
@@ -66,6 +66,86 @@ Please cite the following paper if you find this dataset useful in your research
 }
 ```
 
-## Run the code
+# Run the code
 
-Will be ready soon!
+Some parts of it are still under revision.
+
+## Installation
+To download *Stanford-postagger-full-2018-10-16* and all required libraries.
+You need *Python 3* (I have Python 3.6.7), doesn't work with Python 2.
+Comment Tensorflow (for cpu) in *requirement.txt* if use tensoflow-gpu instead.
+
+```bash
+sh setup.sh
+```
+
+## Data Requirements
+Download [glove_vectors.txt (pre-trained POS embeddings on Google N-gram corpus using POS info from 5-grams)](https://drive.google.com/file/d/1zSfeAKyPTuQMHOP53fPJDYqUqKs22tdJ/view?usp=sharing).
+Download [glove.6B.50d.txt embeddings](https://drive.google.com/file/d/1TShifgw5OjUFYWZBnN5ez5uRijX5W3Ym/view?usp=sharing).
+Put both of them in *data/*.
+## Usage
+There are 3 main modules: **Youtube processing**, **AMT processing** and **Classification**. The first 2 modules are still under revision. The third module can be used without the first 2 ones,
+as all the data is accessible from the *data* folder or *Google Drive*.
+
+### Youtube processing
+Need an youtube downloader API key.
+Given channel ids - *now 10*, and playlist ids for each channel ( 2 playlists / channel), it downloads all videos from each playlist.
+The code can be found in *youtube_preprocessing*.
+
+```bash
+python main_youtube.py
+```
+
+### Amazon Mechanical Turk processing
+Does all processing related to AMT (read data, spam removal, compute agreement), the code is in *amt*.
+```bash
+python main_amt.py
+```
+
+### Classification
+Everything related to classification models, embeddings and features can be found in *classify*.
+
+#### Models
+The available models are: *svm*, *lstm*, *elmo*, *multimodal: video features + elmo embeddings*.
+
+To call the methods, for example *lstm*:
+```bash
+python main_classify.py --do-classify lstm
+```
+
+#### Extra data
+You can find the **context** information for each action in *data/dict_context.json*: each action is assigned the sentence it is extracted from.
+The sentences are extracted from the Youtube transcripts, using the Stanford Parser.\
+You can find both the **POS** and **context embeddings** in *data/Embeddings*. They consist of averaging the first 5 left and right *glove50d* word embeddings. For future work, we want to use *elmo* embeddings.
+
+The **concreteness** dataset from Brysbaert et al. can be find in *data* folder. Also, the data extracted from the file (just the unigrams and their concreteness scores) is in *data/dict_all_concreteness.json*.
+
+The **concreteness and POS** of all the overlapping words in the *test set* actions from our dataset is stored in *data/dict_test_action_pos_concreteness.json* (I will add the *train* and *val* very soon).
+
+To add these **extra features** to your model: for example run *svm with context and pos embeddings*:
+
+```bash
+python main_classify.py --do-classify svm --add-extra context + pos
+```
+
+To run *multimodal with concreteness*:
+```bash
+python main_classify.py --do-classify multimodal --add-extra concreteness
+```
+
+#### Video Features
+The video features are **Inception**, **C3D** and *their concatenation*. These are found in *data/Video/Features*. By default, the multimodal model is run with the concatenation of features:
+*inception + c3d*
+
+To run *multimodal with inception*:
+```bash
+python main_classify.py --do-classify multimodal --type-feat inception
+```
+
+##### YOLO output
+After running YOLOv3 object detector on all the miniclips, all the results are stored in *data/YOLO/miniclips_results*.
+
+For all of this data, there is code available to generate your own data also.
+
+Look in *main_classify.py* **parse_args** method for the rest of the models and data combinations.
+
