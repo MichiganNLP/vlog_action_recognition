@@ -85,7 +85,7 @@ Download [glove.6B.50d.txt embeddings](https://drive.google.com/open?id=1TShifgw
 Put both of them in [`data`](data).
 ## Usage
 There are 3 main modules: **Youtube processing**, **AMT processing** and **Classification**. The first 2 modules are still under revision. The third module can be used without the first 2 ones,
-as all the data is accessible from the *data* folder or *Google Drive*.
+as all the data is accessible from the [`data`](data) folder or *Google Drive*.
 
 ### Youtube processing
 Need an youtube downloader API key.
