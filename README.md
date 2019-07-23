@@ -128,7 +128,7 @@ The **concreteness and POS** of all the words in the actions is stored in [`data
 To add these **extra features** to your model: for example run *svm with context and pos embeddings*:
 
 ```bash
-python main_classify.py --do-classify svm --add-extra context + pos
+python main_classify.py --do-classify svm --add-extra context pos
 ```
 
 To run *multimodal with concreteness*:
