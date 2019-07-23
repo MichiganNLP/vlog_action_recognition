@@ -22,6 +22,28 @@ from classify.utils import reshape_3d_to_2d
 from classify.visualization import print_action_balancing_stats, get_list_actions_for_label, get_nb_visible_not_visible, \
     print_nb_actions_miniclips_train_test_eval, measure_nb_unique_actions
 
+import os
+import glob
+from shutil import copytree
+import string
+from tqdm import tqdm
+
+from nltk.tag import StanfordPOSTagger
+from nltk import PorterStemmer
+stemmer = PorterStemmer()
+
+os.environ["CLASSPATH"] = "stanford-postagger-full-2018-10-16/"
+os.environ["STANFORD_MODELS"] = "stanford-postagger-full-2018-10-16/models/"
+
+st = StanfordPOSTagger('english-bidirectional-distsim.tagger')
+
+
+path_visible_not_visible_actions_csv = 'data/AMT/Output/All/new_clean_visible_not_visible_actions_video_after_spam.csv'
+
+glove = pd.read_table("data/glove.6B.50d.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
+table = str.maketrans({key: None for key in string.punctuation})
+
+glove_pos = pd.read_table("data/glove_vectors.txt", sep=" ", index_col=0, header=None, quoting=csv.QUOTE_NONE)
 
 
 def load_embeddings():
@@ -58,6 +80,149 @@ def get_word_embedding(embeddings_index, word):
     else:
         word_embedding = np.asarray(embedding_vector)
         return word_embedding
+
+
+# Retrieve embedding for a word
+def vec(w, glove_emb):
+    return glove_emb.loc[w].as_matrix()
+
+
+def getStartEnd(action, action_context):
+    action = action.split()
+    action = [i.translate(table) for i in action if i.isalpha()]
+    action_context = [i.translate(table) for i in action_context.split()]
+    possible_beginnings = [i for i in range(len(action_context)) if action_context[i] == action[0]]
+    tenable_beginnings = []
+    tenable_endings = []
+    for beginning in possible_beginnings:
+        current_spot = beginning
+        tenable = True
+        for word in action[1:]:
+            ok = 0
+            if word in action_context[current_spot + 1:]:
+                current_spot = action_context[current_spot + 1:].index(word) + current_spot + 1
+                ok = 1
+            else:
+                for l in action_context[current_spot + 1:]:
+                    if word in l:
+                        current_spot = action_context[current_spot + 1:].index(l) + current_spot + 1
+                        ok = 1
+                        break
+
+                if ok == 0:
+                    tenable = False
+                    break
+        if tenable:
+            tenable_beginnings.append(beginning)
+            tenable_endings.append(current_spot)
+
+    beginning = tenable_beginnings[-1]
+    ending = tenable_endings[-1]
+    return (beginning, ending)
+
+
+def getPOSEmbeddings(action, action_context):
+    action = action.replace("y' all", "y'all")
+    tagged_sentences = st.tag(action_context.split())
+
+    (beginning, ending) = getStartEnd(action, action_context)
+    action_pos = tagged_sentences[beginning:ending + 1]
+
+    pos_representation = [0] * 50
+    count = 0
+    for (word, pos) in action_pos:
+        if pos in glove_pos.index:
+            count += 1
+            pos_representation += vec(pos, glove_pos)
+    if count > 0:
+        pos_representation /= count
+
+    return pos_representation
+
+
+
+def getContextEmbeddings(action, action_context, context_size=5):
+    action = action.replace("y' all", "y'all")
+    (beginning, ending) = getStartEnd(action, action_context)
+    if beginning - context_size < 0:
+        left_context = action_context.split()[0:beginning]
+    else:
+        left_context = action_context.split()[beginning-context_size:beginning]
+    if ending + 1 + context_size > len(action_context.split()):
+        right_context = action_context.split()[ending + 1:]
+    else:
+        right_context = action_context.split()[ending + 1:ending + 1 + context_size]
+    left_representation = [0] * 50
+    count = 0
+    for word in left_context:
+        if word in glove.index:
+            count += 1
+            left_representation += vec(word, glove)
+    if count > 0:
+        left_representation /= count
+    right_representation = [0] * 50
+    count = 0
+    for word in right_context:
+        if word in glove.index:
+            count += 1
+            right_representation += vec(word, glove)
+    if count > 0:
+        right_representation /= count
+
+    return (right_representation, left_representation)
+
+def get_pos_emb_all():
+    video_list = []
+    action_list = []
+    pos_embedding_list = []
+
+    with open('data/dict_context.json', 'r') as fp:
+        context = json.load(fp)
+
+    for video in tqdm(context.keys()):
+        for action in context[video].keys():
+            action_context = context[video][action]
+            if action_context != []:
+                pos_embedding = getPOSEmbeddings(action, action_context)
+            else:
+                pos_embedding = [0] * 50
+            video_list.append(video)
+            action_list.append(action)
+            pos_embedding_list.append(pos_embedding)
+
+    results_train = pd.DataFrame({'video': video_list, 'action': action_list, 'pos_embedding': pos_embedding_list})
+
+    results_train.to_csv("data/Embeddings/new_pos_embeddings.csv")
+
+
+def get_context_emb_all():
+    video_list = []
+    action_list = []
+    left_context_list = []
+    right_context_list = []
+    with open('data/dict_context.json', 'r') as fp:
+        context = json.load(fp)
+
+    for video in context.keys():
+        for action in context[video].keys():
+            action_context = context[video][action]
+            if action_context != []:
+                (left_context, right_context) = getContextEmbeddings(action, action_context)
+            else:
+                (left_context, right_context) = ([0] * 50, [0] * 50)
+
+            video_list.append(video)
+            action_list.append(action)
+            left_context_list.append(left_context)
+            right_context_list.append(right_context)
+
+    results_train = pd.DataFrame({'video': video_list, 'action': action_list, 'left_context': left_context_list, \
+                                  'right_context': right_context_list})
+
+    results_train.to_csv("data/Embeddings/context_embeddings.csv")
+
+
+
 
 
 def create_context_dict(dict_video_actions, path_context_data):
