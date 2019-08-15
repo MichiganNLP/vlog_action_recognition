@@ -612,32 +612,44 @@ def pad_actions(train_actions, test_actions, val_actions):
 
     return x_train, x_test, x_val
 
-#TODO: modify with current data
-def get_concreteness_score(list_actions):
-    with open('data/dict_concreteness.json') as f:
-        dict_concreteness = json.loads(f.read())
+def get_concreteness_score(list_actions, type):
+    with open('data/dict_action_pos_concreteness.json', 'r') as fp:
+        dict_concreteness = json.load(fp)
 
     list_scores = []
     # 98 % coverage
     for action in list_actions:
-        if action in dict_concreteness.keys():
-            score = dict_concreteness[action][0]
+        if action in dict_concreteness:
+            if type == 'all':
+                scores = [l[2] for l in dict_concreteness[action]]
+            elif type == 'noun + vb':
+                scores = [l[2] for l in dict_concreteness[action] if ('VB' in l[1] or 'NN' in l[1])]
+            elif type == 'vb':
+                scores = [l[2] for l in dict_concreteness[action] if 'VB' in l[1]]
+            elif type == 'noun':
+                scores = [l[2] for l in dict_concreteness[action] if 'NN' in l[1]]
+            else:
+                raise ValueError("Wrong type in concreteness dict_type")
         else:
-            score = 0
-        list_scores.append(score)
+            scores = []
+
+        if scores:
+            action_concreteness_score = max(scores)
+        else:
+            action_concreteness_score = 0
+
+        list_scores.append(action_concreteness_score)
 
     scores = np.array(list_scores).reshape(-1, 1)
     return scores
 
 
 def add_concreteness_score(train_actions, test_actions, val_actions, embedding_matrix_actions_train,
-                           embedding_matrix_actions_test, embedding_matrix_actions_val):
-    scores_train = get_concreteness_score(train_actions)
-    scores_test = get_concreteness_score(test_actions)
-    scores_val = get_concreteness_score(val_actions)
-    print("Concreteness score: ")
-    for i in range(len(val_actions)):
-        print(val_actions[i], scores_val[i])
+                           embedding_matrix_actions_test, embedding_matrix_actions_val, type):
+
+    scores_train = get_concreteness_score(train_actions, type)
+    scores_test = get_concreteness_score(test_actions, type)
+    scores_val = get_concreteness_score(val_actions, type)
 
     if embedding_matrix_actions_train is None:
         return scores_train, scores_test, scores_val
@@ -752,7 +764,7 @@ def add_visual_features(train_data, test_data, val_data, x_train, x_test,
 
 def get_embeddings_by_type(type_embedding, add_extra,
                            embeddings_index, train_data,
-                           test_data, val_data):
+                           test_data, val_data, type_concreteness):
     [train_actions, test_actions, val_actions], _, _ = process_data(train_data, test_data, val_data)
 
     if type_embedding == "action":
@@ -770,9 +782,9 @@ def get_embeddings_by_type(type_embedding, add_extra,
         print("Add context")
         x_train, x_test, x_val = add_context_embed(train_data, test_data, val_data, x_train, x_test, x_val)
     if "concreteness" in add_extra:
-        print("Add concreteness")
+        print("Add concreteness: " + type_concreteness + " max score")
         x_train, x_test, x_val = add_concreteness_score(train_actions, test_actions, val_actions, x_train, x_test,
-                                                        x_val)
+                                                        x_val, type_concreteness)
     if "prev-next-action" in add_extra:
         print("Add prev-next action")
         x_train, x_test, x_val = add_prev_action(embeddings_index, train_data, test_data, val_data, x_train, x_test,
