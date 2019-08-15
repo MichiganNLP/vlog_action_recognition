@@ -79,7 +79,7 @@ def save_all_action_pos_concreteness_scores(all_actions):
                 dict_pos[pos] = [[word, float(score)]]
         dict_action_pos_concreteness[action] = dict_pos
 
-    with open('data/dict_test_action_pos_concreteness.json', 'w+') as fp:
+    with open('data/dict_action_pos_concreteness.json', 'w+') as fp:
         json.dump(dict_action_pos_concreteness, fp)
 
 
@@ -124,11 +124,11 @@ def save_all_action_concreteness_scores(all_actions):
             list_scores.append([score, word])
         dict_action_concreteness[action] = list_scores
 
-    with open('data/dict_test_action_concreteness.json', 'w+') as fp:
+    with open('data/dict_action_concreteness.json', 'w+') as fp:
         json.dump(dict_action_concreteness, fp)
 
 def save_all_action_pos_concreteness_scores_1():
-    with open('data/dict_test_action_concreteness.json', 'r') as fp:
+    with open('data/dict_action_concreteness.json', 'r') as fp:
         dict_concreteness = json.load(fp)
 
     dict_action_pos_concreteness = {}
@@ -143,7 +143,7 @@ def save_all_action_pos_concreteness_scores_1():
             score = [l[0] for l in dict_concreteness[action] if l[1] == word][0]
             dict_action_pos_concreteness[action].append([word, pos, float(score)])
 
-    with open('data/dict_test_action_pos_concreteness.json', 'w+') as fp:
+    with open('data/dict_action_pos_concreteness.json', 'w+') as fp:
         json.dump(dict_action_pos_concreteness, fp)
 
 
@@ -154,20 +154,18 @@ def cluster_after_concreteness(type, train_data, test_data, val_data):
     [train_actions, test_actions, val_actions], [train_labels, test_labels, val_labels], _ = process_data(train_data, test_data, val_data)
     all_actions = train_actions + test_actions + val_actions
 
-    #TODO: Save info for train & val (all_actions)
-
     # save_all_action_pos_concreteness_scores(test_actions)
     # save_all_action_concreteness_scores(test_actions)
 
-    with open('data/dict_test_action_pos_concreteness.json', 'r') as fp:
+    with open('data/dict_action_pos_concreteness.json', 'r') as fp:
         dict_concreteness = json.load(fp)
 
     # finetune on val & train data to get the threshold
     #TODO also for average (not only max)
-    dict_type_threshold = {'Noun & Verb max concreteness score': 4.7,
-                           'Noun max concreteness score': 4.7,
-                           'Verb max concreteness score': 3.5,
-                           'All max concreteness score': 4.7
+    dict_type_threshold = {'noun + vb': 4.7,
+                           'noun': 4.7,
+                           'vb': 3.5,
+                           'all': 4.7
                            }
 
     # test on test data
@@ -178,13 +176,13 @@ def cluster_after_concreteness(type, train_data, test_data, val_data):
     for action in test_actions:
         if action in dict_concreteness:
 
-            if type == 'All max concreteness score':
+            if type == 'all':
                 scores = [l[2] for l in dict_concreteness[action]]
-            elif type == 'Noun & Verb max concreteness score':
+            elif type == 'noun + vb':
                 scores = [l[2] for l in dict_concreteness[action] if ('VB' in l[1] or 'NN' in l[1])]
-            elif type == 'Verb max concreteness score':
+            elif type == 'vb':
                 scores = [l[2] for l in dict_concreteness[action] if 'VB' in l[1]]
-            elif type == 'Noun max concreteness score':
+            elif type == 'noun':
                 scores = [l[2] for l in dict_concreteness[action] if 'NN' in l[1]]
             else:
                 raise ValueError("Wrong type in concreteness dict_type")

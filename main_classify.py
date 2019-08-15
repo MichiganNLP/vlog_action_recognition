@@ -20,7 +20,6 @@ from classify.visualization import print_scores_per_method, print_t_test_signifi
 from classify.yolo import process_output_yolo, measure_similarity
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     # noinspection PyTypeChecker
@@ -41,6 +40,9 @@ def parse_args():
 
     parser.add_argument('--type-feat', nargs='+', choices=['inception', 'inception + c3d', 'c3d'],
                         default=['inception + c3d'])
+    parser.add_argument('--type-concr', nargs='+', choices=['noun + vb', 'noun', 'vb', 'all'],
+                        default=['noun + vb'])
+
     parser.add_argument('--do-combine', action='store_true')
     parser.add_argument('--add-extra', nargs='*',
                         choices=["pos", "context", "concreteness", "prev-next-action", "visual-c3d-inception"],
@@ -69,18 +71,16 @@ def store_results(method, list_results, predicted):
     dict_significance[method] = predicted
 
 
-def call_classify(do_classify, train_data, test_data, val_data, embeddings_index, add_extra):
-
+def call_classify(do_classify, train_data, test_data, val_data, embeddings_index, add_extra, type_concreteness):
     global dict_results
     global dict_significance
-
 
     if "lstm" == do_classify:
         embedding_matrix_for_pretrain, max_length = get_matrix_word_embedding(embeddings_index, train_data, test_data,
                                                                               val_data)
         x_train, x_test, x_val = get_embeddings_by_type("padding", [],
                                                         embeddings_index, train_data,
-                                                        test_data, val_data)
+                                                        test_data, val_data, type_concreteness)
         list_results, predicted = train_lstm(embedding_matrix_for_pretrain, x_train, x_test, x_val, train_data,
                                              test_data,
                                              val_data)
@@ -103,7 +103,7 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
     if "svm" == do_classify:
         x_train, x_test, x_val = get_embeddings_by_type("action", add_extra,
                                                         embeddings_index, train_data,
-                                                        test_data, val_data)
+                                                        test_data, val_data, type_concreteness)
         list_results, predicted = train_svm(args.finetune, x_train, x_test, x_val,
                                             train_data, test_data, val_data, add_extra)
         method = args.balance
@@ -118,7 +118,7 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
     if 'multimodal' == do_classify:
         x_train, x_test, x_val = get_embeddings_by_type("action", add_extra,
                                                         embeddings_index, train_data,
-                                                        test_data, val_data)
+                                                        test_data, val_data, type_concreteness)
         list_results, predicted = video_text_concat_elmo(args.param_epochs, train_data, test_data, val_data, x_train,
                                                          x_test,
                                                          x_val, args.type_feat, add_extra,
@@ -130,16 +130,11 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
         store_results(method, list_results, predicted)
 
     if "concreteness" == do_classify:
-
         # get_all_words_concreteness_scores(concreteness_words_txt = "data/Concreteness_ratings_Brysbaert_et_al_BRM.txt")\
-        types_list = ['Noun & Verb max concreteness score', 'Noun max concreteness score',
-                      'Verb max concreteness score', 'All max concreteness score']
-        # for type in types_list:
-        type = types_list[0]
-        list_results, predicted = cluster_after_concreteness(type, train_data, test_data, val_data)
+        list_results, predicted = cluster_after_concreteness(type_concreteness, train_data, test_data, val_data)
 
         method = args.balance
-        method += ' concreteness ' + type
+        method += ' concreteness ' + type_concreteness + ' max score'
         store_results(method, list_results, predicted)
         # save_concreteness_dict(dict_video_actions)
 
@@ -174,12 +169,12 @@ def classify(train_data, test_data, val_data, embeddings_index):
             for add_extra in list_subsets:
                 call_classify(args.do_classify[0], train_data, test_data, val_data,
                               embeddings_index,
-                              add_extra)
+                              add_extra, args.type_concr[0])
 
         else:
             call_classify(args.do_classify[0], train_data, test_data, val_data,
                           embeddings_index,
-                          args.add_extra)
+                          args.add_extra, args.type_concr[0])
 
 
 def process_data_channel(balance, channel_test=1, channel_val=10):
@@ -193,6 +188,7 @@ def process_data_channel(balance, channel_test=1, channel_val=10):
                                                                                                         0:20], val_data[
                                                                                                                0:20]
     return dict_video_actions, train_data, test_data, val_data
+
 
 def main():
     args = parse_args()
