@@ -1,0 +1,106 @@
+Total BFLOPS 65.864 
+
+ seen 64 
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0016.jpg: Predicted in 9801.855000 milli-seconds.
+person: 97%	(left_x:   -4   top_y:   22   width:  363   height:  673)
+diningtable: 35%	(left_x:   89   top_y:   43   width: 1137   height:  636)
+carrot: 90%	(left_x:  135   top_y:  414   width:   71   height:  153)
+carrot: 70%	(left_x:  337   top_y:  443   width:   95   height:  153)
+carrot: 35%	(left_x:  431   top_y:  346   width:  192   height:  165)
+carrot: 61%	(left_x:  436   top_y:  387   width:   59   height:  123)
+carrot: 79%	(left_x:  437   top_y:  532   width:  170   height:   87)
+carrot: 96%	(left_x:  471   top_y:  330   width:  166   height:   71)
+carrot: 68%	(left_x:  476   top_y:  400   width:  109   height:  102)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0006.jpg: Predicted in 9634.970000 milli-seconds.
+knife: 79%	(left_x:   -8   top_y:   39   width:  497   height:  280)
+diningtable: 47%	(left_x:   59   top_y:   39   width: 1168   height:  658)
+bottle: 40%	(left_x:  446   top_y:   -5   width:  241   height:  253)
+person: 28%	(left_x:  704   top_y:    0   width:  430   height:  283)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0011.jpg: Predicted in 9627.166000 milli-seconds.
+person: 93%	(left_x:   24   top_y:   13   width: 1044   height:  352)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0015.jpg: Predicted in 9628.130000 milli-seconds.
+person: 47%	(left_x:    8   top_y:    1   width:  338   height:  373)
+diningtable: 54%	(left_x:   59   top_y:   34   width: 1184   height:  646)
+carrot: 96%	(left_x:  173   top_y:  379   width:   79   height:  142)
+carrot: 39%	(left_x:  326   top_y:  617   width:   75   height:  100)
+carrot: 75%	(left_x:  454   top_y:  538   width:  165   height:   69)
+carrot: 94%	(left_x:  528   top_y:  334   width:  156   height:   83)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0002.jpg: Predicted in 9639.848000 milli-seconds.
+knife: 80%	(left_x:   -7   top_y:   39   width:  495   height:  280)
+diningtable: 43%	(left_x:   59   top_y:   42   width: 1168   height:  653)
+bottle: 45%	(left_x:  447   top_y:   -5   width:  240   height:  253)
+person: 26%	(left_x:  705   top_y:    1   width:  425   height:  280)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0009.jpg: Predicted in 9629.690000 milli-seconds.
+knife: 35%	(left_x:  -21   top_y:   61   width:  313   height:  131)
+person: 83%	(left_x:   80   top_y:  -14   width:  944   height:  635)
+diningtable: 31%	(left_x:  106   top_y:   59   width: 1078   height:  691)
+carrot: 39%	(left_x:  719   top_y:  421   width:  189   height:   74)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0017.jpg: Predicted in 9637.249000 milli-seconds.
+sink: 26%	(left_x:   45   top_y:   48   width: 1119   height:  606)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0003.jpg: Predicted in 9633.173000 milli-seconds.
+knife: 83%	(left_x:   -7   top_y:   39   width:  495   height:  280)
+diningtable: 50%	(left_x:   62   top_y:   37   width: 1164   height:  661)
+bottle: 49%	(left_x:  448   top_y:   -4   width:  239   height:  252)
+person: 26%	(left_x:  706   top_y:    1   width:  424   height:  284)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0013.jpg: Predicted in 9633.667000 milli-seconds.
+person: 41%	(left_x:   -2   top_y:  348   width:  286   height:  369)
+diningtable: 31%	(left_x:   38   top_y:   -1   width: 1221   height:  726)
+knife: 26%	(left_x:  124   top_y:  271   width:   61   height:  133)
+carrot: 68%	(left_x:  395   top_y:  590   width:   66   height:  125)
+carrot: 90%	(left_x:  395   top_y:  363   width:  158   height:   80)
+carrot: 58%	(left_x:  526   top_y:  528   width:  182   height:   61)
+carrot: 48%	(left_x:  578   top_y:  390   width:  159   height:   92)
+carrot: 92%	(left_x:  621   top_y:  320   width:  161   height:   88)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0007.jpg: Predicted in 9629.693000 milli-seconds.
+knife: 43%	(left_x:   -6   top_y:    4   width:  305   height:  145)
+person: 62%	(left_x:  272   top_y:    6   width:  720   height:  359)
+carrot: 26%	(left_x:  650   top_y:  369   width:  228   height:   70)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0004.jpg: Predicted in 9631.920000 milli-seconds.
+knife: 83%	(left_x:   -7   top_y:   39   width:  495   height:  280)
+diningtable: 50%	(left_x:   62   top_y:   37   width: 1164   height:  661)
+bottle: 49%	(left_x:  448   top_y:   -4   width:  239   height:  252)
+person: 26%	(left_x:  706   top_y:    1   width:  424   height:  284)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0021.jpg: Predicted in 9626.813000 milli-seconds.
+carrot: 69%	(left_x:  712   top_y:  282   width:  492   height:  401)
+carrot: 34%	(left_x:  954   top_y:  393   width:  198   height:  234)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0012.jpg: Predicted in 9626.543000 milli-seconds.
+person: 96%	(left_x:  -16   top_y:   36   width:  468   height:  650)
+carrot: 27%	(left_x:  470   top_y:  414   width:  106   height:  140)
+carrot: 75%	(left_x:  577   top_y:  513   width:  169   height:   73)
+carrot: 91%	(left_x:  632   top_y:  309   width:  158   height:   80)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0005.jpg: Predicted in 9627.861000 milli-seconds.
+knife: 83%	(left_x:   -7   top_y:   39   width:  495   height:  280)
+diningtable: 50%	(left_x:   62   top_y:   37   width: 1164   height:  661)
+bottle: 49%	(left_x:  448   top_y:   -4   width:  239   height:  252)
+person: 26%	(left_x:  706   top_y:    1   width:  424   height:  284)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0014.jpg: Predicted in 9628.856000 milli-seconds.
+person: 52%	(left_x:  -14   top_y:   13   width:  559   height:  461)
+carrot: 94%	(left_x:  248   top_y:  345   width:   86   height:  136)
+carrot: 58%	(left_x:  377   top_y:  589   width:   60   height:  130)
+carrot: 56%	(left_x:  419   top_y:  427   width:  131   height:  124)
+carrot: 61%	(left_x:  514   top_y:  539   width:  169   height:   59)
+carrot: 46%	(left_x:  548   top_y:  374   width:   73   height:  126)
+carrot: 96%	(left_x:  626   top_y:  332   width:  153   height:   93)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0008.jpg: Predicted in 9629.998000 milli-seconds.
+person: 36%	(left_x:   69   top_y:   26   width:  569   height:  424)
+person: 65%	(left_x:  133   top_y:   22   width:  977   height:  355)
+knife: 35%	(left_x:  477   top_y:  291   width:  157   height:  272)
+carrot: 64%	(left_x:  711   top_y:  449   width:  185   height:   63)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0018.jpg: Predicted in 9625.250000 milli-seconds.
+person: 97%	(left_x:   22   top_y:   11   width: 1089   height:  691)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0001.jpg: Predicted in 9629.523000 milli-seconds.
+knife: 85%	(left_x:   -5   top_y:   39   width:  490   height:  280)
+diningtable: 45%	(left_x:   58   top_y:   44   width: 1165   height:  649)
+bottle: 49%	(left_x:  446   top_y:   -5   width:  240   height:  252)
+person: 30%	(left_x:  708   top_y:    0   width:  424   height:  283)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0019.jpg: Predicted in 9637.251000 milli-seconds.
+person: 72%	(left_x:   15   top_y:   10   width: 1091   height:  696)
+person: 51%	(left_x:   71   top_y:    2   width:  945   height:  257)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0010.jpg: Predicted in 9636.361000 milli-seconds.
+person: 82%	(left_x:   79   top_y:  -15   width:  910   height:  528)
+diningtable: 62%	(left_x:  109   top_y:   15   width: 1066   height:  684)
+carrot: 48%	(left_x:  731   top_y:  425   width:  173   height:   72)
+Enter Image Path: /home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/1mini_8/frames/0020.jpg: Predicted in 9633.877000 milli-seconds.
+person: 39%	(left_x:  -23   top_y:  -15   width: 1113   height:  311)
+person: 74%	(left_x:   17   top_y:   19   width: 1083   height:  678)
+Enter Image Path: 

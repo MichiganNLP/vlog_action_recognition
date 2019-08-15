@@ -1,0 +1,14 @@
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0006.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0011.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0002.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0009.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0003.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0013.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0007.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0004.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0012.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0005.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0014.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0008.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0001.jpg
+/home/oignat/Desktop/Workspace/Vision_Resources/yolo_12222018/output/0mini_5/frames/0010.jpg
