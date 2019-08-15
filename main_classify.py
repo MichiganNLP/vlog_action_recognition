@@ -41,7 +41,8 @@ def parse_args():
     parser.add_argument('--type-feat', nargs='+', choices=['inception', 'inception + c3d', 'c3d'],
                         default=['inception + c3d'])
     parser.add_argument('--type-concr', nargs='+', choices=['noun + vb', 'noun', 'vb', 'all'],
-                        default=['noun + vb'])
+                        default=['noun + vb'],
+                        help='type of concreteness score: noun + vb = maximum score between all nouns and verbs in the action')
 
     parser.add_argument('--do-combine', action='store_true')
     parser.add_argument('--add-extra', nargs='*',
