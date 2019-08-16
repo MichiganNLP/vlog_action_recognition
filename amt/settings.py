@@ -1,5 +1,5 @@
 PATH_input_batch = "data/AMT/Input"
-PATH_output_batch = "data/AMT/Output/All"
+PATH_output_batch = "data/AMT/Output"
 
 # initial AMT results
 PATH_input_file_name = PATH_input_batch + "/Batch_video_batch_results_all.csv"

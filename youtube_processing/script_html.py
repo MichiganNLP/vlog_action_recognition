@@ -1,9 +1,8 @@
 #!/usr/bin/env python2
-
+import json
 import os
 import csv
 from collections import defaultdict
-import ffmpy
 from datetime import datetime
 import glob
 import copy
@@ -18,8 +17,6 @@ def write_html(in_file_name, out_file_name):
     lines = input_file.readlines()
     input_file.close()
 
-    index_line = 0
-    new_input = []
     for line in lines:
         sth, action = line.split(":")
         output_file.write(
@@ -39,10 +36,9 @@ def get_actions_time_from_csv(csv_file_name):
     reader = csv.DictReader(csv_file)
     for row in reader:
         for (k, v) in row.items():
-            if (k == 'key' and v != ""):
+            if k == 'key' and v != "":
                 set_index_video.add(v)
-            # if(k == 'transcript_id' and v!= ""):
-            #     set_index_video.add(v)
+
     csv_file.close()
 
     for key in set_index_video:
@@ -55,14 +51,10 @@ def get_actions_time_from_csv(csv_file_name):
 
         for row in reader:
             for (k, v) in row.items():
-                if (k == 'key' and v == key):
+                if k == 'key' and v == key:
                     for (k, v) in row.items():
-                        if (v != ""):
+                        if v != "":
                             columns[k].append(v)
-                #  if(k == 'transcript_id' and v == key):
-                #     for (k,v) in row.items():
-                #         if( v!=""):
-                #             columns[k].append(v)
 
         actions_column = columns['actions']
         start_column = columns['start_time']
@@ -75,43 +67,21 @@ def get_actions_time_from_csv(csv_file_name):
                 x = string.replace(x, '&', 'and')
             filtered_actions.append(x)
 
-        # actions_column = [x if ("&" not in x) else 'and' for x in actions_column]
-
         video_dict[key].append(filtered_actions)
         video_dict[key].append(start_column)
         video_dict[key].append(end_column)
 
-    # for key in list_index_video:
-
-    #     csv_file = open(csv_file_name,'r')
-    #     reader = csv.DictReader(csv_file)
-
-    #     video_dict[key] = []
-    #     columns = defaultdict(list)
-
-    #     for row in reader: 
-    #         for (k,v) in row.items():
-    #             if(k == 'key' and v == key):
-    #                 for (k,v) in row.items():
-    #                     if( v!=""):
-    #                         columns[k].append(v)
-
-    #     actions_column = columns['actions']
-    #     start_column = columns['start_time']
-    #     end_column = columns['end_time']
-
-    #     video_dict[key].append(actions_column)
-    #     video_dict[key].append(start_column)
-    #     video_dict[key].append(end_column)
-
-    # return actions_column, start_column, end_column
     return video_dict
 
 
+'''
+    - 3s for start_column
+    + 3s for end_column
+    time_window = 3
+'''
+
+
 def resize_time_per_action(video_dict, time_window):
-    # - 3s for start_column
-    # + 3s for end_column
-    # time_window = 3
     resized_video_dict = dict()
     for key in video_dict.keys():
         resized_video_dict[key] = []
@@ -160,11 +130,9 @@ def resize_time_per_action(video_dict, time_window):
             else:
                 new_start_column = new_start_column[:-1]
 
-        list_tuples_time = []
         for i in range(0, len(new_start_column)):
             resized_video_dict[key].append((new_start_column[i], new_end_column[i]))
-    #       list_tuples_time.append((new_start_column[i], new_end_column[i]))
-    #  resized_video_dict[key].append(list_tuples_time)
+
     return resized_video_dict
 
 
@@ -269,10 +237,7 @@ def process_time_per_action(resized_video_dict, video_dict):
                     i = j
                     break
 
-                # to save it as json
-            # clip_actions_time[str(miniclip_index) + channel_video_index].append([final_start_time, final_end_time])
-            # clip_actions_time[str(miniclip_index) + channel_video_index].append(list(mini_clip_list_action))
-
+            # to save it as json
             clip_actions_time[(miniclip_index, channel_video_index)].append([final_start_time, final_end_time])
             clip_actions_time[(miniclip_index, channel_video_index)].append(list(mini_clip_list_action))
 
@@ -303,16 +268,6 @@ def make_mini_clips(clip_actions_time, p_input_video, path_output_video):
 
         time_start = clip_actions_time[(mini_index, channel_video_index)][0][0]
         time_end = clip_actions_time[(mini_index, channel_video_index)][0][1]
-
-        # if (mini_index == 0 and video_index == "2"):
-        #     print time_start, time_end
-        # if (mini_index == 20 and video_index == "2"):
-        #     print time_start, time_end
-        #  ff = ffmpy.FFmpeg(inputs={path_input_video : None}, outputs={path_output_video + video_index + 'mini_' + str(mini_index) + '.mp4': '-vcodec -copy  -acodec copy -ss ' + str(time_start) + ' -to ' + str(time_end) + ' -c copy -copyts '})
-
-        # ff = ffmpy.FFmpeg(inputs={path_input_video : None}, outputs={path_output_video +  channel_index + "_" + video_index  + 'mini_' + str(mini_index) + '.mp4': ' -ss ' + str(time_start) + ' -to ' + str(time_end) + ' -c copy -copyts '})
-
-        # ff.run()
 
         # command = 'ffmpeg -i ' + path_input_video + ' -ss ' + time_start + ' -to ' + time_end + ' -c:a aac -strict -2 ' + path_output_video + channel_index + "_" + video_index  + 'mini_' + str(mini_index) + '.mp4'
         # command = 'ffmpeg -i ' + path_input_video + ' -ss ' + time_start + ' -to ' + time_end + ' -c:a aac -strict -2 -vcodec libx264 -r 15 -preset ultrafast -s 800x600 ' + path_output_video + channel_index + "_" + video_index  + 'mini_' + str(mini_index) + '.mp4'
@@ -445,8 +400,8 @@ def create_input_AMT_WHOLE(PATH_INPUT_AMT, filtered_clip_actions_time, PARAM_nb_
                     else:
                         cont = 0
 
-    print "There are " + str(nb_miniclips) + " miniclips and " + str(len(set_videos)) + " videos " + str(
-        len(set_playlist)) + " playlists"
+    print("There are " + str(nb_miniclips) + " miniclips and " + str(len(set_videos)) + " videos " + str(
+        len(set_playlist)) + " playlists")
 
 
 def write_in_csv_file(csv_file_name, filtered_clip_actions_time, max_nb_actions_per_video):
@@ -463,7 +418,7 @@ def write_in_csv_file(csv_file_name, filtered_clip_actions_time, max_nb_actions_
 
             mini_index = key[0]
             channel_video_index = key[1][1:-1]
-            print key, channel_video_index
+            print(key, channel_video_index)
             channel_index, video_index = channel_video_index.split(", ")
 
             video_url = channel_index + "_" + video_index + "mini_" + str(mini_index) + '.mp4'
@@ -487,21 +442,7 @@ def write_in_csv_file(csv_file_name, filtered_clip_actions_time, max_nb_actions_
                 line.append(string_actions[:-1])
                 if (index_key % 5 == 0):
                     writer.writerow(line)
-
                     line = []
-
-                # if(index_key >= len(filtered_clip_actions_time.keys())):
-                #     # if video_url == '1_5mini_4.mp4':
-                #     #     print "Haa4"
-                #     rest_nb_actions = (10 - len(line)) / 2
-                #     #put the first rest_nb_actions
-                #     #line = put_first_rest_nb_actions(line, rest_nb_actions)
-                #     for elem in range(0,rest_nb_actions * 2):
-                #         line.append('nothing')
-                #     writer.writerow(line)
-                #     break_all_loops = 1
-                #     break
-
                 if (nb_actions % 7 == 0 and nb_actions < len(actions)):
                     cont = 1
                     actions = actions[nb_actions:]
@@ -512,53 +453,6 @@ def write_in_csv_file(csv_file_name, filtered_clip_actions_time, max_nb_actions_
 
 
 def add_ground_truth_in_csv_AMT(IN_csv_file_name, ground_truth_csv_file_name, OUT_csv_file_name):
-    # with open(OUT_csv_file_name, "wb+") as csv_file2:
-    #     fieldnames = ['video_url1', 'actions1','video_url2', 'actions2','video_url3', 'actions3','video_url4', 'actions4','video_url5', 'actions5']
-    #     writer = csv.DictWriter(csv_file2, fieldnames=fieldnames)
-    #     writer.writeheader()
-
-    #     nb_lines_to_write = 80 # 80 hits 
-    #     with open(IN_csv_file_name, "r") as csv_file1:
-    #         reader1 = csv.DictReader(csv_file1)
-
-    #         video_url1 = ""
-    #         video_url2 = ""
-    #         video_url3 = ""
-    #         video_url4 = ""
-    #         actions_1 = ""
-    #         actions_2 = ""
-    #         actions_3 = ""
-    #         actions_4 = ""
-    #         for row1 in reader1:
-    #             nb_lines_to_write -= 1 
-    #             for (k,v) in row1.items():
-    #                 if k == "video_url1":
-    #                     video_url1 = v
-    #                 if k == "actions1":
-    #                     actions_1 = v
-    #                 if k == "video_url2":
-    #                     video_url2 = v
-    #                 if k == "actions2":
-    #                     actions_2 = v
-    #                 if k == "video_url3":
-    #                     video_url3 = v
-    #                 if k == "actions3":
-    #                     actions_3 = v
-    #                 if k == "video_url4":
-    #                     video_url4 = v
-    #                 if k == "actions4":
-    #                     actions_4 = v
-
-    #             writer.writerow({'video_url1':video_url1, 'actions1':actions_1,'video_url2':video_url2, 'actions2':actions_2,'video_url3':video_url3, 'actions3':actions_3,'video_url4':video_url4, 'actions4':actions_4})
-
-    #             if nb_lines_to_write == 0:
-    #                 break
-
-    # nb_lines_wrote = 80 - nb_lines_to_write
-    # print nb_lines_wrote
-
-    # nb_lines_to_write = 80
-    # nb_cells_to_write = nb_lines_to_write * 2 # 80 hits 
     nb_cells_to_write = 0
     ok = 1
     ok_continue = 1
@@ -584,13 +478,7 @@ def add_ground_truth_in_csv_AMT(IN_csv_file_name, ground_truth_csv_file_name, OU
                     nb_cells_to_write -= 1
 
                 if nb_cells_to_write % 2 == 0 and video_url5 != "" and actions_5 != "":
-                    # writer.writerow({'video_url5':video_url5, 'actions5':actions_5})
                     what_to_write.append((video_url5, actions_5))
-                # if nb_cells_to_write <= 0:
-                #     ok = 0
-                #     break
-            # if ok == 0:
-            #     break
 
     in_file = open(IN_csv_file_name, "rb")
     reader = csv.reader(in_file)
@@ -688,8 +576,8 @@ def create_input_GT(filtered_clip_actions_time, output_AMT_GT):
                     else:
                         cont = 0
 
-    print "There are " + str(nb_miniclips) + " miniclips and " + str(len(set_videos)) + " videos " + str(
-        len(set_playlist)) + " playlists"
+    print("There are " + str(nb_miniclips) + " miniclips and " + str(len(set_videos)) + " videos " + str(
+        len(set_playlist)) + " playlists")
 
     return
 
@@ -710,9 +598,8 @@ def write_video_times(clip_actions_time):
             tdelta = datetime.strptime(end_time, FMT) - datetime.strptime(start_time, FMT)
 
             tdelta_h, tdelta_min, tdelta_seconds = str(tdelta).split(":")
-            # print clip_actions_time[(miniclip_index,channel_video_index)][1], tdelta,tdelta_h,tdelta_min,tdelta_seconds
             tdelta_total = int(tdelta_seconds) + int(tdelta_min) * 60 + int(tdelta_h) * 360
-            # write in file
+
             writer.writerow({'miniclip_name': video_name, 'time(seconds)': tdelta_total})
 
     csvfile.close()
@@ -725,14 +612,14 @@ def create_miniclips(PATH_actions_file, PATH_videos, PATH_miniclips):
     resized_video_dict = resize_time_per_action(video_dict, 3)
     clip_actions_time = process_time_per_action(resized_video_dict, video_dict)
 
-    # with open('actions_time_FINAL.json', 'w+') as outfile:  
-    #     json.dump(clip_actions_time, outfile)
+    with open('actions_time_FINAL.json', 'w+') as outfile:
+        json.dump(clip_actions_time, outfile)
 
     print("Write time per miniclip")
-    # write_video_times(clip_actions_time)
+    write_video_times(clip_actions_time)
 
     print("Now making the miniclips")
-    # make_mini_clips(clip_actions_time, PATH_videos, PATH_miniclips)
+    make_mini_clips(clip_actions_time, PATH_videos, PATH_miniclips)
 
     return clip_actions_time
 

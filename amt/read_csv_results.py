@@ -1,10 +1,8 @@
-#!/usr/bin/env python2
+from __future__ import print_function, absolute_import, unicode_literals, division
 
 import os
-import sys
 import csv
-from collections import defaultdict, OrderedDict
-from nltk import agreement
+from collections import OrderedDict
 import collections
 from sklearn.metrics import cohen_kappa_score, accuracy_score
 import subprocess
@@ -25,17 +23,8 @@ def getLength(filename):
 
 def compute_agreement(rater1, rater2, rater3=None):
     if (rater3 == None):
-        # print rater1, rater2
         kappa_ratingtask = cohen_kappa_score(rater1, rater2)
-    # print kappa_ratingtask
     else:
-        # taskdata=[[0,str(i),str(rater1[i])] for i in range(0,len(rater1))]+[[1,str(i),str(rater2[i])] for i in range(0,len(rater2))]+[[2,str(i),str(rater3[i])] for i in range(0,len(rater3))]
-        # ratingtask = agreement.AnnotationTask(data=taskdata)
-        # kappa_ratingtask = ratingtask.kappa()
-        # print kappa_ratingtask
-        # print("fleiss " + str(ratingtask.multi_kappa()))
-        # print("alpha " + str(ratingtask.alpha()))
-        # print("scotts " + str(ratingtask.pi()))
 
         n = 3  # nb of raters
         N = len(rater1)  # nb of subjects
@@ -59,8 +48,6 @@ def compute_agreement(rater1, rater2, rater3=None):
                 nb_raters_0 += 1
             else:
                 nb_raters_1 += 1
-            # print subject, nb_raters_0, nb_raters_1
-            # write in a csv
 
             # spamwriter.writerow([nb_raters_0, nb_raters_1])
             nb = 1.0 * (nb_raters_0 * nb_raters_0 + nb_raters_1 * nb_raters_1 - n) / (n * (n - 1))
@@ -71,19 +58,14 @@ def compute_agreement(rater1, rater2, rater3=None):
         p[0] = 1.0 * p[0] / (N * n)
         p[1] = 1.0 * p[1] / (N * n)
 
-        # print P, p
-
         P_mean = 1.0 * sum(P) / len(P)
         p_e = p[0] * p[0] + p[1] * p[1]
 
-        # print P_mean, p_e
         # variation is 0 (division by 0) if all turkers answered the same
         if p_e == 1:
             kappa_ratingtask = 1
         else:
             kappa_ratingtask = 1.0 * (P_mean - p_e) / (1 - p_e)
-
-    interpretation = ""
 
     if (kappa_ratingtask <= 0):
         interpretation = "less than chance"
@@ -134,22 +116,21 @@ def get_list_interpretations(csv_file_name):
         rater_answers.append(answer)
 
         if (index % 3 == 0):
-            print "\n------------------"
-            print "Agreement for HIT " + str(index_hit) + ":"
+            print("\n------------------")
+            print("Agreement for HIT " + str(index_hit) + ":")
             interpretation = compute_agreement(rater_answers[0], rater_answers[1], rater_answers[2])
             list_interpretations.append(interpretation)
 
     counter = collections.Counter(list_interpretations)
-    print counter
+    print(counter)
     csv_file.close()
 
 
+# Random sampling for verification
 def TEST_results_input_AMT(list_hits_to_verify, dict_actions_output):
-    ## Random sampling for verification
-
-    print "\n----------------------- Random Sampling ---------------------\n"
+    print("\n----------------------- Random Sampling ---------------------\n")
     for hit in list_hits_to_verify:
-        print hit
+        print(hit)
         list_values = dict_actions_output[hit][1]
         index_video = 0
         for video_name in dict_actions_output[hit][0].keys():
@@ -167,10 +148,10 @@ def TEST_results_input_AMT(list_hits_to_verify, dict_actions_output):
                                     results_per_worker.append(result_value)
                                     break
 
-                    print str(index_video), str(index_action), results_per_worker, video_name, action
+                    print(str(index_video), str(index_action), results_per_worker, video_name, action)
                     index_action += 1
                 index_video += 1
-        print "\n-----------------------------------------------\n"
+        print("\n-----------------------------------------------\n")
 
 
 def read_results_from_AMT(csv_file_name):
@@ -291,100 +272,6 @@ def read_results_from_AMT(csv_file_name):
     return dict_output, dict_actions_output
 
 
-'''
-def get_results_per_HIT(csv_file_name, nb_turks_per_hit):
-
-
-    csv_file = open(csv_file_name,'r')
-    reader = csv.DictReader(csv_file)
-
-    hit_id = ""
-    index_hit = 1
-    rater_answers = []
-    index = 0
-
-    list_hit_ids = []
-
-    list_answers = []
-    for row in reader: 
-        index += 1
-        answer = []   
-
-        for (column_name, value) in row.items():
-            if column_name == "HITId":
-                if value != hit_id:
-                    hit_id = value
-                    index_hit += 1
-                    rater_answers = []
-                    list_hit_ids.append(value)
-
-            if "Answer.name" in column_name:
-                if value != "nothing" and value != '':
-                    val, video_id, action_id, result = value.split('_')
-                    video_id = int(video_id)
-                    action_id = int(action_id)
-                    result = int(result)
-                # if(value == ''):
-                #     name, video_id, action_id = column_name.split('_')
-                #     video_id = int(video_id)
-                #     action_id = int(action_id)
-                #     result = -1    
-                answer.append((video_id, action_id, result))
-
-            
-        rater_answers.append(answer)
-       
-        if(index % nb_turks_per_hit == 0):
-            print "\n------------------"
-            print "Answers for HIT " + str(index_hit) + ":"
-            print rater_answers
-            list_answers.append(rater_answers)
-
-    # list_actions_hit = []
-    dict_actions_hit = OrderedDict()
-    # print len(list_answers)
-    for hit_nb in range(0,len(list_answers)):
-        list_actions_per_hit = list_answers[hit_nb]
-        list_actions_turk = []
-        #3 - nb turkers per HIT
-        if len(list_actions_per_hit) != nb_turks_per_hit:
-            print hit_nb
-            continue
-        for i in range(0,nb_turks_per_hit): 
-            list_actions_per_turk = list_actions_per_hit[i]
-            dict_actions = dict()
-
-            for video_id in range(0,5):
-                dict_actions[video_id] = []
-            
-            for r in list_actions_per_turk:
-                video_id = r[0]
-                action_id = r[1]
-                result = r[2]
-                dict_actions[video_id].append((action_id, result))
-            
-            for key in dict_actions.keys():
-                list_values = dict_actions[key]
-                sorted_by_first = sorted(list_values, key=lambda tup: tup[0])
-                list_ordered_values = []
-                for (index, value) in sorted_by_first:
-                    list_ordered_values.append(value)
-                
-                dict_actions[key] = list_ordered_values
-            
-            list_actions_turk.append(dict_actions)
-
-        if hit_nb == 130:
-            print list_hit_ids[hit_nb], list_actions_turk
-        # list_actions_hit.append(list_actions_turk)  
-        dict_actions_hit[list_hit_ids[hit_nb]] = list_actions_turk   
-
-    csv_file.close()
-
-    return dict_actions_hit
-'''
-
-
 def get_action_names_per_video(csv_file_name):
     csv_file = open(csv_file_name, 'r')
     reader = csv.DictReader(csv_file)
@@ -417,18 +304,17 @@ def get_action_names_per_video(csv_file_name):
     GLOBAL_NB_GT_VIDEOS = len(set_videos_GT)
     GLOBAL_NB_GT_MINICLIPS = len(set_miniclips_GT)
 
-    print "There are " + str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos and " + str(
-        GLOBAL_NB_NONGT_MINICLIPS) + " miniclips."
-    print "There are " + str(GLOBAL_NB_GT_VIDEOS) + " GT videos and " + str(GLOBAL_NB_GT_MINICLIPS) + " miniclips."
-    print "In total, there are " + str(GLOBAL_NB_NONGT_VIDEOS + GLOBAL_NB_GT_VIDEOS) + " videos and " + str(
-        GLOBAL_NB_NONGT_MINICLIPS + GLOBAL_NB_GT_MINICLIPS) + " miniclips."
+    print("There are " + str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos and " + str(
+        GLOBAL_NB_NONGT_MINICLIPS) + " miniclips.")
+    print("There are " + str(GLOBAL_NB_GT_VIDEOS) + " GT videos and " + str(GLOBAL_NB_GT_MINICLIPS) + " miniclips.")
+    print("In total, there are " + str(GLOBAL_NB_NONGT_VIDEOS + GLOBAL_NB_GT_VIDEOS) + " videos and " + str(
+        GLOBAL_NB_NONGT_MINICLIPS + GLOBAL_NB_GT_MINICLIPS) + " miniclips.")
 
     return GLOBAL_NB_NONGT_VIDEOS, GLOBAL_NB_NONGT_MINICLIPS, GLOBAL_NB_GT_VIDEOS, GLOBAL_NB_GT_MINICLIPS
 
 
 def write_output_file(output_file_name, dict_output):
     hit_id = dict_output.keys()[0]
-    print hit_id
     video_name = dict_output[hit_id].keys()[0]
     result = dict_output[hit_id][video_name]
     nb_turks_per_hit = len(result[0][1])
@@ -440,7 +326,7 @@ def write_output_file(output_file_name, dict_output):
         elif (nb_turks_per_hit == 1):
             fieldnames = ['HIT_nb', 'Video_name', 'Actions', 'Worker_1', 'All_Yes_actions']
         else:
-            print "Different number of turkers!!"
+            print("Different number of turkers!!")
 
         nb_all_visible_actions = 0
         nb_majority_visible_actions = 0
@@ -489,102 +375,6 @@ def write_output_file(output_file_name, dict_output):
                             writer.writerow(
                                 {'HIT_nb': hit_id, 'Video_name': video_name, 'Actions': action, 'Worker_1': result_1,
                                  'Worker_2': result_2, 'Worker_3': result_3})
-                            # else:
-                        # print "Different number of turkers for hit " + str(hit_id)
-
-    # if nb_turks_per_hit == 3:   
-    #     print "There are " + str(nb_total_actions) + " total actions in " + str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-    #     print "There are " + str(nb_majority_visible_actions) + " majority (labeled by at least 2/3 workers ) visible actions in "+ str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-    #     print "There are " + str(nb_all_visible_actions) + " all visible (labeled by 3/3 workers) actions in "+ str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-    #     print "majority_visible / total actions = " + str (1.0 * nb_majority_visible_actions / nb_total_actions)
-    #     print "all_visible / total actions = " + str (1.0 * nb_all_visible_actions / nb_total_actions)
-    #     print "majority_visible / # NON GT VIDEOS = " + str (1.0 * nb_majority_visible_actions / GLOBAL_NB_NONGT_VIDEOS)
-    #     print "all_visible / # NON GT VIDEOS = " + str (1.0 * nb_all_visible_actions / GLOBAL_NB_NONGT_VIDEOS)
-    #     print "majority_visible / # NON GT MINICLIPS = " + str (1.0 * nb_majority_visible_actions / GLOBAL_NB_NONGT_MINICLIPS)
-    #     print "all_visible / # NON GT MINICLIPS = " + str (1.0 * nb_all_visible_actions / GLOBAL_NB_NONGT_MINICLIPS)
-    #     print "##-------------------------------------------------##"
-
-
-# def write_output_file(output_file_name, dict_action_names, list_video_names, dict_results_hit, nb_turks_per_hit):
-#     with open(output_file_name, 'w+') as csvfile:
-#         if(nb_turks_per_hit == 3):
-#             fieldnames = ['HIT_nb', 'Video_nb', 'Video_name', 'Actions', 'Worker_1', 'Worker_2', 'Worker_3', 'All_Yes_actions', 'Majority_Yes_actions']
-#         elif(nb_turks_per_hit == 1):
-#             fieldnames = ['HIT_nb', 'Video_nb', 'Video_name', 'Actions', 'Worker_1', 'All_Yes_actions']
-#         else:
-#             print "Different number of turkers!!"
-#         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-#         nb_all_visible_actions = 0
-#         nb_majority_visible_actions = 0
-#         nb_total_actions = 0
-
-#         writer.writeheader()
-#         index_hit = -1
-#         ##for hit_id in range(0,len(list_results_hit)):
-#         for hit_id in dict_results_hit.keys():
-#             index_hit += 1
-#             for video_nb in dict_action_names[hit_id].keys():
-#                 action_nb = -1
-#                 for action in dict_action_names[hit_id][video_nb]:
-#                     action_nb += 1
-#                     video_name = list_video_names[index_hit][video_nb]
-#                     # print hit_id, video_nb
-#                     if len(dict_results_hit[hit_id][0][video_nb]) <= action_nb:
-#                         continue
-#                     if(nb_turks_per_hit == 3):
-#                         # if(len(list_action_names[hit_id][video_nb]) == len(list_results_hit[hit_id][0][video_nb])):
-#                         result_1 = dict_results_hit[hit_id][0][video_nb][action_nb]
-#                         # else:
-#                         #     result_1 = "missing values"
-
-#                         # if(len(list_action_names[hit_id][video_nb]) == len(list_results_hit[hit_id][1][video_nb])):
-#                         result_2 = dict_results_hit[hit_id][1][video_nb][action_nb]
-#                         # else:
-#                         #     result_2 = "missing values"
-
-#                         # if(len(list_action_names[hit_id][video_nb]) == len(list_results_hit[hit_id][2][video_nb])):
-#                         result_3 = dict_results_hit[hit_id][2][video_nb][action_nb]
-#                         # else:
-#                         #     result_3 = "missing values"
-
-#                         #print list_action_names[hit_id][video_nb], list_results_hit[hit_id][0][video_nb], action_nb, list_results_hit[hit_id][0][video_nb][action_nb]
-#                         #writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb, 'Actions': action, 'Worker_1': result_1, 'Worker_2': result_2, 'Worker_3': result_3})
-#                         if video_nb != 4:
-#                             nb_total_actions += 1
-#                         if (result_1 == result_2 == result_3 == 0):
-#                             if video_nb != 4:
-#                                 nb_all_visible_actions += 1
-#                                 nb_majority_visible_actions += 1
-#                             writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb,'Video_name': video_name , 'Actions': action, 'Worker_1': result_1, 'Worker_2': result_2, 'Worker_3': result_3, 'All_Yes_actions': action, 'Majority_Yes_actions': action})
-#                         elif (result_1 == result_2 == 0 or result_1 == result_3 == 0 or result_3 == result_2 == 0):
-#                             if video_nb != 4:
-#                                 nb_majority_visible_actions += 1
-#                             writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb, 'Video_name': video_name, 'Actions': action, 'Worker_1': result_1, 'Worker_2': result_2, 'Worker_3': result_3, 'Majority_Yes_actions': action})
-#                         else:
-#                             writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb, 'Video_name': video_name, 'Actions': action, 'Worker_1': result_1, 'Worker_2': result_2, 'Worker_3': result_3})
-
-#                     elif(nb_turks_per_hit == 1):
-
-#                         result_1 = dict_results_hit[hit_id][0][video_nb][action_nb]
-
-#                         if(result_1 == 0):
-#                             writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb, 'Video_name': video_name, 'Actions': action, 'Worker_1': result_1, 'All_Yes_actions': action})
-#                         else:
-#                             writer.writerow({'HIT_nb': hit_id, 'Video_nb': video_nb, 'Video_name': video_name, 'Actions': action, 'Worker_1': result_1})
-#                     else:
-#                         print "Different number of turkers!!"
-
-#     # print "There are " + str(nb_total_actions) + " total actions in " + str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-#     # print "There are " + str(nb_majority_visible_actions) + " majority (labeled by at least 2/3 workers ) visible actions in "+ str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-#     # print "There are " + str(nb_all_visible_actions) + " all visible (labeled by 3/3 workers) actions in "+ str(GLOBAL_NB_NONGT_VIDEOS) + " NON-GT videos"
-#     # print "majority_visible / total actions = " + str (1.0 * nb_majority_visible_actions / nb_total_actions)
-#     # print "all_visible / total actions = " + str (1.0 * nb_all_visible_actions / nb_total_actions)
-#     # print "majority_visible / # NON GT VIDEOS = " + str (1.0 * nb_majority_visible_actions / GLOBAL_NB_NONGT_VIDEOS)
-#     # print "all_visible / # NON GT VIDEOS = " + str (1.0 * nb_all_visible_actions / GLOBAL_NB_NONGT_VIDEOS)
-#     # print "majority_visible / # NON GT MINICLIPS = " + str (1.0 * nb_majority_visible_actions / GLOBAL_NB_NONGT_MINICLIPS)
-#     # print "all_visible / # NON GT MINICLIPS = " + str (1.0 * nb_all_visible_actions / GLOBAL_NB_NONGT_MINICLIPS)
-#     # print "##-------------------------------------------------##"
 
 
 def compare_results(csv_file_name1, csv_file_name2):
@@ -608,8 +398,8 @@ def compare_results(csv_file_name1, csv_file_name2):
                 set_videos2.add(value)
     csv_file2.close()
 
-    print len(set_videos1), len(set_videos2)
-    print set_videos2 - set_videos1
+    print(len(set_videos1), len(set_videos2))
+    print(set_videos2 - set_videos1)
 
 
 def compute_statistics(csv_file_name, spammers, no_spammers, double_spammers):
@@ -660,13 +450,13 @@ def compute_statistics(csv_file_name, spammers, no_spammers, double_spammers):
     precision = nb_TP / float(nb_TP + nb_FP)
     recall = nb_TP / float(nb_FN + nb_TP)
     F1_measure = 2 * precision * recall / (precision + recall)
-    print "FOR MAJORITY YES (2 out of 3)"
-    print "accuracy is : " + str(accuracy)
-    print "precision is : " + str(precision) + " = how many selected items are relevant"
-    print "recall is : " + str(recall) + " = how many relevant items are selected"
-    print "F1 score is : " + str(F1_measure)
-    print "total nb of actions: " + str(nb_FN + nb_FP + nb_TN + nb_TP)
-    print "total nb of HITS: " + str(len(hit_numbers))
+    print("FOR MAJORITY YES (2 out of 3)")
+    print("accuracy is : " + str(accuracy))
+    print("precision is : " + str(precision) + " = how many selected items are relevant")
+    print("recall is : " + str(recall) + " = how many relevant items are selected")
+    print("F1 score is : " + str(F1_measure))
+    print("total nb of actions: " + str(nb_FN + nb_FP + nb_TN + nb_TP))
+    print("total nb of HITS: " + str(len(hit_numbers)))
 
     # compute for all of YES
     for (ground_truth, majority, all_yes) in results:
@@ -683,18 +473,16 @@ def compute_statistics(csv_file_name, spammers, no_spammers, double_spammers):
     precision = nb_TP / float(nb_TP + nb_FP)
     recall = nb_TP / float(nb_FN + nb_TP)
     F1_measure = 2 * precision * recall / (precision + recall)
-    print "FOR ALL YES (3 out of 3)"
-    print "accuracy is : " + str(accuracy)
-    print "precision is : " + str(precision) + " = how many selected items are relevant"
-    print "recall is : " + str(recall) + " = how many relevant items are selected"
-    print "F1 score is : " + str(F1_measure)
+    print("FOR ALL YES (3 out of 3)")
+    print("accuracy is : " + str(accuracy))
+    print("precision is : " + str(precision) + " = how many selected items are relevant")
+    print("recall is : " + str(recall) + " = how many relevant items are selected")
+    print("F1 score is : " + str(F1_measure))
 
 
 def compute_agreement_ok(csv_file_name, ok_1_equal_2, spammer_hits, no_spammers, nb_turks_agree):
     csv_file = open(csv_file_name, 'r')
     reader = csv.DictReader(csv_file)
-
-    rater_answers = []
 
     list_results = []
     for row in reader:
@@ -746,16 +534,8 @@ def compute_agreement_ok(csv_file_name, ok_1_equal_2, spammer_hits, no_spammers,
                 per_hit_val_rater2.append(value2)
                 per_hit_val_rater3.append(value3)
             else:
-                print "------------------"
-                print "Agreement for HIT " + str(hit) + ":"
-                # with open('agreement/HIT' + str(hit) +'.txt', 'w+') as the_file:
-                #     the_file.write('Worker1 Worker2 Worker3\n')
-                #     for (v1,v2,v3) in zip(per_hit_val_rater1,per_hit_val_rater2,per_hit_val_rater3):
-                #         the_file.write(str(v1)+" "+str(v2)+" "+str(v3)+'\n')
-
-                # print per_hit_val_rater1
-                # print per_hit_val_rater2
-                # print per_hit_val_rater3
+                print("------------------")
+                print("Agreement for HIT " + str(hit) + ":")
                 interpretation = compute_agreement(per_hit_val_rater1, per_hit_val_rater2, per_hit_val_rater3)
                 interpreations_per_hit.append(interpretation)
                 per_hit_val_rater1 = []
@@ -767,12 +547,12 @@ def compute_agreement_ok(csv_file_name, ok_1_equal_2, spammer_hits, no_spammers,
 
                 hit = hit_nb
         # compute for last HIT
-        print "------------------"
-        print "Agreement for HIT " + str(hit) + ":"
+        print("------------------")
+        print("Agreement for HIT " + str(hit) + ":")
         interpretation = compute_agreement(per_hit_val_rater1, per_hit_val_rater2, per_hit_val_rater3)
         interpreations_per_hit.append(interpretation)
-        print "------------------"
-        print "For 3 Workers Overall Agreement: "
+        print("------------------")
+        print("For 3 Workers Overall Agreement: ")
 
         overall_interpretation = compute_agreement(val_rater1, val_rater2, val_rater3)
 
@@ -785,8 +565,8 @@ def compute_agreement_ok(csv_file_name, ok_1_equal_2, spammer_hits, no_spammers,
                 per_hit_val_rater1.append(value1)
                 per_hit_val_rater2.append(value2)
             else:
-                print "------------------"
-                print "Agreement for HIT " + str(hit) + ":"
+                print("------------------")
+                print("Agreement for HIT " + str(hit) + ":")
                 interpretation = compute_agreement(per_hit_val_rater1, per_hit_val_rater2)
                 interpreations_per_hit.append(interpretation)
                 per_hit_val_rater1 = []
@@ -796,19 +576,19 @@ def compute_agreement_ok(csv_file_name, ok_1_equal_2, spammer_hits, no_spammers,
 
                 hit = hit_nb
         # compute for last HIT
-        print "------------------"
-        print "Agreement for HIT " + str(hit) + ":"
+        print("------------------")
+        print("Agreement for HIT " + str(hit) + ":")
         interpretation = compute_agreement(per_hit_val_rater1, per_hit_val_rater2)
         interpreations_per_hit.append(interpretation)
-        print "------------------"
-        print "For 2 workers Overall Agreement:"
+        print("------------------")
+        print("For 2 workers Overall Agreement:")
         overall_interpretation = compute_agreement(val_rater1, val_rater2)
 
     # for i in range(0,len(interpreations_per_hit)):
     #         print i, ',', interpreations_per_hit[i]
 
     counter = collections.Counter(interpreations_per_hit)
-    print counter
+    print(counter)
 
 
 def filter_results_for_spam(worker_file_name, filtered_file_name):
@@ -848,7 +628,6 @@ def get_channels_with_nb_visible_actions(output_file_name, nb_turks_per_hit, pat
     dict_miniclip_actions = dict()
 
     # divide to the total nb of actions because the number of actions per channel varies ..
-
     for row in reader:
         for (column_name, value) in row.items():
             if "Video_name" == column_name:
@@ -895,20 +674,6 @@ def get_channels_with_nb_visible_actions(output_file_name, nb_turks_per_hit, pat
 
     return list_miniclip_nb_visible_actions
 
-    # list_channel_nb_visible_actions = []
-    # for channel in dict_channels_actions.keys():
-    #     nb_total_actions = len(dict_channels_actions[channel])
-    #     nb_visible_actions = 0
-    #     for value in dict_channels_actions[channel]:
-    #         if value == '0':
-    #             nb_visible_actions += 1
-
-    # #     print channel, nb_total_actions, nb_visible_actions, 1.0 * nb_visible_actions/nb_total_actions        
-    #     list_channel_nb_visible_actions.append((channel, 1.0 * nb_visible_actions/nb_total_actions))
-
-    # sorted_by_second = sorted(list_channel_nb_visible_actions, key=lambda tup: tup[1])
-    # print sorted_by_second
-
 
 def write_stats_in_csv(output_file_name, list_miniclip_nb_visible_actions):
     with open(output_file_name, 'w+') as csvfile:
@@ -919,8 +684,6 @@ def write_stats_in_csv(output_file_name, list_miniclip_nb_visible_actions):
 
         for (miniclip, miniclip_length, nb_total_actions, nb_visible_actions) in list_miniclip_nb_visible_actions:
             miniclip_length = float(miniclip_length.split(":")[2])
-            print miniclip, miniclip_length, nb_total_actions, nb_visible_actions
-
             writer.writerow(
                 {'Miniclip': miniclip, 'miniclip_length': miniclip_length, 'nb_total_actions': nb_total_actions,
                  'nb_visible_actions': nb_visible_actions,
@@ -946,8 +709,8 @@ def get_stats_no_GT(csv_file_name):
                         if value != "":
                             nb_visible_actions_all += 1
 
-    print "There are", str(nb_visible_actions_maj), "visible actions labeled by majority of workers (2 out of 3)"
-    print "There are", str(nb_visible_actions_all), "visible actions labeled by all workers (1 out of 3)"
+    print("There are", str(nb_visible_actions_maj), "visible actions labeled by majority of workers (2 out of 3)")
+    print("There are", str(nb_visible_actions_all), "visible actions labeled by all workers (1 out of 3)")
 
 
 def compare_with_GT(dict_actions_hit, AMT_input_csv, GT_csv, output_results_csv, spammers_files, csv_file_name):
@@ -1110,24 +873,6 @@ def compare_with_GT(dict_actions_hit, AMT_input_csv, GT_csv, output_results_csv,
                 potential_spammers[hit_nb].add(worker)
                 spammers_low_GT_acc[hit_nb].add(worker)
 
-    # for key in potential_spammers.keys():
-    #     if potential_spammers[key] != set():
-    #         # print "Potential spammers for HIT", str(key), ":", potential_spammers[key]
-
-    # print "---------Verify: Spammers grouped by category -----------"
-    # print "---------------------------------------------------------"
-    # print "-------------Put they same value everywhere -------------"
-    # for key in spammers_same_val.keys():
-    #     if spammers_same_val[key] != set():
-    #         print "Spammer for HIT", str(key), ":", spammers_same_val[key]
-
-    # print "---------------------------------------------------------"
-    # print "-------------Low accuracy with GT < 0.2 -------------"
-    # for key in spammers_low_GT_acc.keys():
-    #     if spammers_low_GT_acc[key] != set():
-    #         print "Spammer for HIT", str(key), ":", spammers_low_GT_acc[key]
-    #         print "GT: ", values_GT[key]
-
     list_keys = dict()
     with open(csv_file_name, 'r') as csvinput:
         for row in csv.reader(csvinput):
@@ -1202,9 +947,6 @@ def create_after_spam_filtered_results(output_file_name, potential_spammers, com
         Worker_1 = ""
         Worker_2 = ""
         Worker_3 = ""
-        worker_GT = ""
-        All_Yes_actions = ""
-        Majority_Yes_actions = ""
         for row in reader:
             for (column_name, value) in row.items():
                 if column_name == 'Actions':
@@ -1254,15 +996,12 @@ def get_visible_and_not_visible_actions(after_spam_filter_csv, visible_not_visib
         writer = csv.DictWriter(csvfile2, fieldnames=fieldnames)
         writer.writeheader()
 
-        HIT_nb = ""
         Actions = ""
         Video_name = ""
         Worker_1 = ""
         Worker_2 = ""
         Worker_3 = ""
-        worker_GT = ""
-        All_Yes_actions = ""
-        Majority_Yes_actions = ""
+
         for row in reader:
             for (column_name, value) in row.items():
                 if column_name == 'Actions':
@@ -1316,33 +1055,6 @@ def get_visible_and_not_visible_actions(after_spam_filter_csv, visible_not_visib
     csv_file.close()
     csvfile2.close()
 
-    # list_visible_actions = []
-    # for action in visible_actions.values():
-    #     list_visible_actions.append(action)
-    # flat_visible_actions = [item for sublist in list_visible_actions for item in sublist]
-
-    # list_all_visible_actions = []
-    # for action in all_visible_actions.values():
-    #     list_all_visible_actions.append(action)
-    # flat_all_visible_actions = [item for sublist in list_all_visible_actions for item in sublist]
-
-    # list_not_visible_actions = []
-    # for action in not_visible_actions.values():
-    #     list_not_visible_actions.append(action)
-    # flat_not_visible_actions = [item for sublist in list_not_visible_actions for item in sublist]
-
-    # print "There are " + str(GLOBAL_NB_NONGT_VIDEOS) + " NON GT videos and " + str(GLOBAL_NB_GT_VIDEOS) + " GT videos"
-    # print "There are " + str(GLOBAL_NB_NONGT_MINICLIPS) + " NON GT miniclips and " + str(GLOBAL_NB_GT_MINICLIPS) + " GT miniclips"
-    # print "There are " + str(len(flat_visible_actions)) +  " visible actions and " + str(len(flat_not_visible_actions)) + " not visible actions."
-    # print "There are " + str(len(flat_visible_actions)) + " majority (labeled by at least 2/3 workers ) visible actions in "+ str(GLOBAL_NB_NONGT_VIDEOS + GLOBAL_NB_GT_VIDEOS) + " videos"
-    # print "There are " + str(len(flat_all_visible_actions)) + " all visible (labeled by 3/3 workers) actions in "+ str(GLOBAL_NB_NONGT_VIDEOS + GLOBAL_NB_GT_VIDEOS) + " videos"
-    # print "majority_visible / total actions = " + str (1.0 * len(flat_visible_actions) / (len(flat_visible_actions) + len(flat_not_visible_actions)))
-    # print "all_visible / total actions = " + str (1.0 * len(flat_all_visible_actions) / (len(flat_visible_actions) + len(flat_not_visible_actions)))
-    # print "majority_visible / # VIDEOS = " + str (1.0 * len(flat_visible_actions) / GLOBAL_NB_NONGT_VIDEOS)
-    # print "all_visible / # VIDEOS = " + str (1.0 * len(flat_all_visible_actions) / GLOBAL_NB_NONGT_VIDEOS)
-    # print "majority_visible / # MINICLIPS = " + str (1.0 * len(flat_visible_actions) / GLOBAL_NB_NONGT_MINICLIPS)
-    # print "all_visible / # MINICLIPS = " + str (1.0 * len(flat_all_visible_actions) / GLOBAL_NB_NONGT_MINICLIPS)
-
     return visible_actions, not_visible_actions
 
 
@@ -1389,23 +1101,6 @@ def compare_spammers_files(bad_spammers, good_spammers):
         else:
             list_spammers_ok_labeled.append(key_bad_spammer)
 
-    # print "Spammmers labeleled OKAY:"
-    # dict_workers_labeled_ok = OrderedDict()
-    # for key_bad_spammer in list_spammers_ok_labeled:
-    #     WorkerID = dict_bad_spammers[key_bad_spammer][0]
-    #     AssignmentId = key_bad_spammer
-    #     DateSubmitted = dict_bad_spammers[key_bad_spammer][1]
-    #     if WorkerID not in dict_workers_labeled_ok.keys():
-    #         dict_workers_labeled_ok[WorkerID] = []
-    #     dict_workers_labeled_ok[WorkerID].append([AssignmentId, DateSubmitted])
-    # for key_bad_spammer in dict_workers_labeled_ok:
-    #     print "WorkerId:", key_bad_spammer
-    #     for l in dict_workers_labeled_ok[key_bad_spammer]:
-    #         print "AssignmentId:", l[0], "DateSubmitted:", l[1]
-
-    # print "------------------------------------------------------------"
-    # print "Spammmers labeleled WRONG:"
-
     dict_workers_labeled_wrong = OrderedDict()
     for key_bad_spammer in list_spammers_wrongly_labeled:
         WorkerID = dict_bad_spammers[key_bad_spammer][0]
@@ -1417,7 +1112,7 @@ def compare_spammers_files(bad_spammers, good_spammers):
     for key_bad_spammer in dict_workers_labeled_wrong:
         # print "WorkerId:", key_bad_spammer
         for l in dict_workers_labeled_wrong[key_bad_spammer]:
-            print "WorkerId:", key_bad_spammer, "AssignmentId:", l[0], "DateSubmitted:", l[1]
+            print("WorkerId:", key_bad_spammer, "AssignmentId:", l[0], "DateSubmitted:", l[1])
     # print "There were {0} workers labeled wrong and {1} total assignments".format(len(dict_workers_labeled_wrong.keys()), len(list_spammers_wrongly_labeled)) 
     # print "There were {0} workers labeled okay and {1} total assignments".format(len(dict_workers_labeled_ok.keys()), len(list_spammers_ok_labeled)) 
 
@@ -1463,7 +1158,7 @@ if __name__ == '__main__':
         if len(potential_spammers[hit_nb]) > 1:
             compromised_hits.append(hit_nb)
     spammer_hits = potential_spammers.keys()
-    print "Compromised hits: " + str(compromised_hits)
+    print("Compromised hits: " + str(compromised_hits))
 
     after_spam_filter_csv = PATH_output_batch + "/results_after_spam_filter_video" + str(index_batch) + ".csv"
     create_after_spam_filtered_results(output_file_name, potential_spammers, compromised_hits, after_spam_filter_csv)
@@ -1492,58 +1187,3 @@ if __name__ == '__main__':
         ROOT_PATH + "Output/" + "Batch" + str(4) + "/visible_not_visible_actions_video_after_spam" + str(4) + ".csv")
     a = a.append(b)
     a.to_csv(PATH_all_visible_not_visible_after_spam, index=False)
-
-    '''
-    #-----------------------Compute statistics-----------------------
-    # # spammers = [5,6,10,14,24,25,26,31,32,33,35,39,43,46,47]
-    # # compromised_hits = [10, 39, 46] #hits with 2 or more spammers (compromised)
-    # no_spammers = 0
-    # #compute_statistics("BOTH_output.csv", spammers, no_spammers, compromised_hits)
-    # # #-------------------------------------------------
-
-     #------------------- Agreement -------------------
-    ##get_list_interpretations(csv_file_name)  #compute agreement between workers
-    ok_1_equal_2 = 1
-    no_spammers = 0
-    nb_turks_agree = 3 #2
-    #spammers = [5,6,10,14,24,25,26,31,32,33,35,39,43,46,47]
-   # print "There are ", len(spammers), " spammers"
-    #compute_agreement_ok(output_file_name, ok_1_equal_2, spammer_hits, no_spammers, nb_turks_agree)
-
-    #----------------- Compare with Ground truth --------------
-    #The ground truth was the last miniclip from each HIT
-    #Filter only those (that have ground truth) from the worker's work 
-    worker_file_name = ROOT_PATH + "results_batch2.csv"
-    filtered_file_name = ROOT_PATH + "filtered_results_batch2.csv"
-
-
-    #get_stats_no_GT(output_file_name)
-    #compare_results("MyBatch_190568_batch_results.csv", "Batch_3202002_batch_results.csv")
-    # GT_csv = "/mnt/c/Users/ignat/Desktop/Workspace_Research/CODE/AMT2/Batch1/results_batch_GT.csv"#sys.argv[2]
-   
-    #filter_results_for_spam(worker_file_name, filtered_file_name)
-    #for each hit, write HIT_ID 
-    # csv_file_name = "/mnt/c/Users/ignat/Desktop/Workspace_Research/CODE/AMT2/Batch_3273051_batch_results.csv"#sys.argv[1]
-    # csv_file = open(csv_file_name,'r')
-    # reader = csv.DictReader(csv_file)
-
-    # prev_hit_id = '0'
-    # for row in reader: 
-    #     for (column_name, value) in row.items():
-    #         if column_name == 'HITId':
-    #             hit_id = value
-    #             if hit_id != prev_hit_id:
-    #                 print hit_id
-    #             prev_hit_id = hit_id
-
-    
-    
-   # get the channels with their number of visible actions
-    # nb_turks_per_hit = 3
-    # output_file_name = "/mnt/c/Users/ignat/Desktop/Workspace_Research/CODE/AMT2/results_GT_FINAL.csv"#sys.argv[2]
-    # path_miniclips = "/mnt/c/Users/ignat/Desktop/Workspace_Research/CODE/videos_captions/test_GT/"
-    # list_miniclip_nb_visible_actions = get_channels_with_nb_visible_actions(output_file_name, nb_turks_per_hit, path_miniclips)
-    # stats_file_name = "/mnt/c/Users/ignat/Desktop/Workspace_Research/CODE/AMT2/stats.csv"
-    # write_stats_in_csv(stats_file_name, list_miniclip_nb_visible_actions)
-
-    '''

@@ -3,6 +3,7 @@ import argparse
 import sys
 import pprint
 import json
+
 sys.path.insert(0, '../')
 
 from amt.read_AMT import process_results_amt
@@ -18,10 +19,9 @@ def main():
     dict_output, dict_actions_output = process_results_amt(args.print_stats)
 
     agreements_score = []
-    # threshold_list = [0.2, 0.5, 0.8, 1]
-    # threshold_list = [0.8]
-    # for threshold in threshold_list:
-    print ("------ For threshold {0}".format(args.threshold))
+    threshold_list = [0.2, 0.5, 0.8, 1]
+
+    print("------ For threshold {0}".format(args.threshold))
     if args.do_spam:
         potential_spammers = create_after_spam_filtered_results(dict_output, args.print_stats, args.threshold)
 
@@ -43,16 +43,17 @@ def main():
         print("Average agreement per hit is {0} when do_1_eq_2 is {1}".format(avg_agreement, args.do_1_eq_2))
 
         overall_fleiss_agreement_all = agreement_overall(PATH_after_spam_filter_csv, args.do_1_eq_2, None)
-        print("All Overall Fleiss agreement is {0} when do_1_eq_2 is {1}".format(overall_fleiss_agreement_all, args.do_1_eq_2))
+        print("All Overall Fleiss agreement is {0} when do_1_eq_2 is {1}".format(overall_fleiss_agreement_all,
+                                                                                 args.do_1_eq_2))
 
         overall_fleiss_agreement_gt = agreement_overall(PATH_output_results_csv, args.do_1_eq_2, potential_spammers)
-        print("GT Overall Fleiss agreement is {0} when do_1_eq_2 is {1}".format(overall_fleiss_agreement_gt, args.do_1_eq_2))
-
+        print("GT Overall Fleiss agreement is {0} when do_1_eq_2 is {1}".format(overall_fleiss_agreement_gt,
+                                                                                args.do_1_eq_2))
 
         agreements_score.append((avg_agreement, overall_fleiss_agreement_all))
 
-    #if args.do_plots:
-    #plot_threshold_agreement(threshold_list, agreements_score)
+    if args.do_plots:
+        plot_threshold_agreement(threshold_list, agreements_score)
 
 
 def parse_args():

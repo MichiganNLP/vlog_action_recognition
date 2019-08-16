@@ -1,12 +1,12 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import, unicode_literals, division
 
 from collections import OrderedDict
 import csv
 from sklearn.metrics import accuracy_score
 
-from Test_data import get_miniclips_video_stats, print_stats_actions_miniclips, get_actions_stats
+from amt.Test_data import get_miniclips_video_stats, print_stats_actions_miniclips, get_actions_stats
 
-from settings import *
+from amt.settings import *
 
 import pandas as pd
 import numpy as np

@@ -1,10 +1,10 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import, unicode_literals, division
 
 from collections import OrderedDict, Counter
 
 import pandas as pd
 from sklearn.metrics import cohen_kappa_score
-
+import matplotlib.pyplot as plt
 
 # Adapted from https://gist.github.com/ShinNoNoir/4749548
 from amt.detect_spam import get_compromised_hits
@@ -49,14 +49,12 @@ def fleiss_kappa(ratings, n):
 
 
 def plot_agreement(x, threshold):
-    import matplotlib.pyplot as plt
     plt.hist(x, normed=True, bins=30)
     plt.xlabel('Agreement score')
     plt.savefig('data/plots/' + str(threshold) + '_agreement_score.png')  # save the figure to file
     plt.close()
 
 def plot_threshold_agreement(threshold_list, agreement_list):
-    import matplotlib.pyplot as plt
     plt.style.use('seaborn-whitegrid')
     avg_agreement = [i[0] for i in agreement_list]
     overall_agreement = [i[1] for i in agreement_list]
@@ -178,12 +176,6 @@ def agreement_per_hit(path_after_spam_filter_csv, do_1_eq_2, do_cohen):
                 ratings = compute_ratings(df_worker_1.values.tolist(), df_worker_2.values.tolist(),
                                           df_worker_3.values.tolist())
 
-                # ratings = [(0,'0'),(0,'0'),(0,'1'),(1,'0'),(1,'0'),(1,'1'),(2,'1'),(2,'0'),(2,'1'),(3,'0'),(3,'0'),(3,'1')]
-                # score = fleiss_kappa(ratings, 3)
-                # print(score)
-                # print("lalal")
-                # ratings = [(0, '1'), (0, '1'), (0, '0'), (1, '0'), (1, '1'), (1, '0'), (2, '1'), (2, '1'), (2, '0'),
-                #            (3, '1'), (3, '1'), (3, '0'), (4, '1'), (4, '1'), (4, '1')]
                 score = fleiss_kappa(ratings, 3)
                 print(score)
         else:
@@ -203,17 +195,6 @@ def agreement_per_hit(path_after_spam_filter_csv, do_1_eq_2, do_cohen):
 
 
         dict_hit_agreement[hit_id] = score
-
-        # if hit_id == '3ZRKL6Z1E7292VLB9E3I826JL7UGS7':
-        #     print (df_worker_1.values.tolist())
-        #     print (df_worker_2.values.tolist())
-        #     print (df_worker_3.values.tolist())
-        #
-        # if hit_id == '34HEO7RUG5TWRP8V8PB3M6QK1CLARS':
-        #     print (df_worker_1.values.tolist())
-        #     print (df_worker_2.values.tolist())
-        #     print (df_worker_3.values.tolist())
-
 
     # dictionary sorted by value
     return OrderedDict(sorted(dict_hit_agreement.items(), key=lambda t: t[1], reverse=True))

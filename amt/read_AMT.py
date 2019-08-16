@@ -1,10 +1,10 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import, unicode_literals, division
 
 import string
 from collections import OrderedDict
 import csv
 
-from Test_data import print_stats_actions_miniclips, get_miniclips_video_stats, get_actions_stats
+from amt.Test_data import print_stats_actions_miniclips, get_miniclips_video_stats, get_actions_stats
 from amt.settings import PATH_input_file_name, PATH_output_file_name
 
 

@@ -3,20 +3,15 @@ from __future__ import print_function, absolute_import, unicode_literals, divisi
 import os
 from collections import OrderedDict
 
-from classify.concreteness import cluster_after_concreteness, get_all_words_concreteness_scores
-from classify.main_model import train_video_text_concat, train_dense, video_text_concat_elmo, \
-    text_concat_elmo
-from classify.preprocess import get_data, load_embeddings, get_embeddings_by_type, get_word_embedding, \
-    get_matrix_word_embedding, process_data
+from classify.concreteness import cluster_after_concreteness
+from classify.main_model import video_text_concat_elmo
+from classify.preprocess import get_data, load_embeddings, get_embeddings_by_type, get_matrix_word_embedding
 from classify.lstm import train_elmo, train_lstm
 import argparse
 
-from classify.process_video_features import get_inception_c3d_feat, extract_video_features, test_c3d, \
-    load_inception_c3d_feat, print_action_concreteness
 from classify.svm import train_svm
 from classify.utils import get_all_combinations
-from classify.visualization import print_scores_per_method, print_t_test_significance, \
-    calculate_significance_between_2models, calculate_metrics, color, measure_nb_unique_actions
+from classify.visualization import print_scores_per_method
 from classify.yolo import process_output_yolo, measure_similarity
 
 
@@ -144,7 +139,7 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
         objects_dict = process_output_yolo("data/Video/YOLO/miniclips_results/")
 
         similarity_method = similarity_methods[2]
-        threshold = 0.8 # after finetuning on val_data
+        threshold = 0.8  # after finetuning on val_data
         list_results, predicted = measure_similarity(similarity_method, threshold, objects_dict,
                                                      embeddings_index, train_data, test_data, val_data)
 
@@ -188,7 +183,6 @@ def main():
     embeddings_index = load_embeddings()
 
     dict_video_actions, train_data, test_data, val_data = process_data_channel(args.balance)
-
     # measure_nb_unique_actions(dict_video_actions)
 
     classify(train_data, test_data, val_data, embeddings_index)

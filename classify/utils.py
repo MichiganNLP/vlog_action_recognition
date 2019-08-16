@@ -50,7 +50,6 @@ def clean_list_actions(list_actions):
 
 
 def clean_actions_file(clean_visible, clean_not_visible, path_visible_not_visible_actions_csv):
-    # path_visible_not_visible_actions_csv = "/local/oignat/action_recognition_clean/data/AMT/Output/All/visible_not_visible_actions_video_after_spam.csv"
     df = pd.read_csv(path_visible_not_visible_actions_csv)
 
     df.loc[df["Visible Actions"].isnull(), "Visible Actions"] = ""
