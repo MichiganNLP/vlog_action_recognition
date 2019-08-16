@@ -68,11 +68,19 @@ def measure_by_method(action, list_objects, method, embedding_index):
     list_word_action_nouns = nouns
 
     if list_objects == [] or list_word_action_all == [] or (list_word_action_nouns == [] and (
+<<<<<<< HEAD
             method == 'wup_sim' or method == 'cos_sim nouns')):
         best = 0
 
     else:
         if method == 'wup_sim':
+=======
+            method == 'wup_similarity' or method == 'cosine similarity only nouns')):
+        best = 0
+
+    else:
+        if method == 'wup_similarity':
+>>>>>>> ddfd6d3c3ce6c1afe92fe4d39362abf391c0ff87
             # speed it up by collecting the synsets for all words in list_objects and list_word_action once, and taking the product of the synsets.
             allsyns1 = set(ss for word in list_objects for ss in wordnet.synsets(word))
             allsyns2 = set(ss for word in list_word_action_nouns for ss in wordnet.synsets(word))
@@ -82,12 +90,21 @@ def measure_by_method(action, list_objects, method, embedding_index):
             else:
                 best, s1, s2 = max((wordnet.wup_similarity(s1, s2) or 0, s1, s2) for s1, s2 in product(allsyns1, allsyns2))
 
+<<<<<<< HEAD
         elif method == 'cos_sim all':
             best = cosine_similarity_lists(list_objects, list_word_action_all, embedding_index)
         elif method == 'cos_sim nouns':
             best = cosine_similarity_lists(list_objects, list_word_action_nouns, embedding_index)
         else:
             raise ValueError("wrong similarity method name")
+=======
+        elif method == 'cosine similarity all words':
+            best = cosine_similarity_lists(list_objects, list_word_action_all, embedding_index)
+        elif method == 'cosine similarity only nouns':
+            best = cosine_similarity_lists(list_objects, list_word_action_nouns, embedding_index)
+        else:
+            raise ValueError("Wrong method name")
+>>>>>>> ddfd6d3c3ce6c1afe92fe4d39362abf391c0ff87
     return best
 
 
@@ -95,8 +112,23 @@ def measure_similarity(method, threshold, objects_dict, embedding_index, train_d
 
     [train_actions, test_actions, val_actions], [train_labels, test_labels, val_labels], [train_miniclips, test_miniclips, val_miniclips] = process_data(train_data, test_data,
                                                                                                       val_data)
+<<<<<<< HEAD
     index = 0
     yolo_labels = []
+=======
+
+    best_threshold = threshold
+    #best_acc = 0
+    # for threshold in [0.6,0.7,0.8]:
+    # best_threshold = 0.7 # FOR VAL
+    # threshold = best_threshold
+    print("------- With threshold " + str(threshold) + " ------------: ")
+
+    index = 0
+    list_indexes_to_del = []
+    yolo_labels = []
+    # gt_labels = train_labels + val_labels
+>>>>>>> ddfd6d3c3ce6c1afe92fe4d39362abf391c0ff87
     gt_labels = test_labels
     for video in test_miniclips:
         if video in objects_dict.keys():
@@ -110,7 +142,16 @@ def measure_similarity(method, threshold, objects_dict, embedding_index, train_d
                 yolo_labels.append(1)
         else:
             yolo_labels.append(1)
+<<<<<<< HEAD
 
+=======
+        #     list_indexes_to_del.append(index)
+
+
+    # for index in sorted(list_indexes_to_del, reverse=True):
+    #     del gt_labels[index]
+    print(yolo_labels)
+>>>>>>> ddfd6d3c3ce6c1afe92fe4d39362abf391c0ff87
     accuracy = accuracy_score(gt_labels, yolo_labels)
     f1 = f1_score(gt_labels, yolo_labels)
     recall = recall_score(gt_labels, yolo_labels)

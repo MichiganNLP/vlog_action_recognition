@@ -149,6 +149,7 @@ python main_classify.py --do-classify multimodal --type-feat inception
 After running YOLOv3 object detector on all the miniclips, all the results are stored [here](https://drive.google.com/file/d/11GrSXgvKIqVpyTB0UrXhliIM--IWElll/view?usp=sharing). Copy them in [`data/Video/YOLO/miniclips_results`](data/Video/YOLO/miniclips_results).
 
 ### Useful
+
 For all of this data, there is code available to generate your own data also.
 
 Look in [`main_classify.py`](main_classify.py) *parse_args* method for the rest of the models and data combinations.
