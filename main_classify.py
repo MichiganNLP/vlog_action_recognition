@@ -140,26 +140,16 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
         # save_concreteness_dict(dict_video_actions)
 
     if "yolo" == do_classify:
+        similarity_methods = ['wup_sim', 'cos_sim all', 'cos_sim nouns']
+        objects_dict = process_output_yolo("data/Video/YOLO/miniclips_results/")
 
-        methods = ['wup_similarity', 'cosine similarity all words', 'cosine similarity only nouns']
-        objects_dict = process_output_yolo("data/YOLO/miniclips_results/")
-        method = methods[0]
-        # for method in methods:
-        print("# ------- YOLO using " + method + " ------------")
-        # After finetuning on val:
-        if method == 'cosine similarity all words':
-            threshold = 0.8
-        elif method == 'cosine similarity only nouns':
-            threshold = 0.8
-        elif method == 'wup_similarity':
-            threshold = 0.8
-        else:
-            raise ValueError('YOLO - Wrong method!!')
-        list_results, predicted = measure_similarity(method, threshold, objects_dict,
+        similarity_method = similarity_methods[2]
+        threshold = 0.8 # after finetuning on val_data
+        list_results, predicted = measure_similarity(similarity_method, threshold, objects_dict,
                                                      embeddings_index, train_data, test_data, val_data)
 
         method = args.balance
-        method += ' yolo '
+        method += ' YOLO ' + similarity_method + ' ' + str(threshold)
         store_results(method, list_results, predicted)
 
 
