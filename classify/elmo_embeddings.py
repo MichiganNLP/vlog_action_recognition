@@ -37,28 +37,6 @@ class ElmoEmbeddingLayer(Layer):
     def compute_output_shape(self, input_shape):
         return input_shape[0], self.dimensions
 
-#
-# def build_elmo_model():
-#     input_action = layers.Input(shape=(1,), dtype=tf.string)
-#     embedding = ElmoEmbeddingLayer()(input_action)
-#     extra_input = layers.Input(shape=(1,), dtype=tf.string)
-#     extra_emb = layers.Embedding(128, output_dim= 512)(extra_input)
-#     print(embedding.shape, extra_emb.shape)
-#     concat_embed = keras.layers.concatenate([embedding, extra_emb])
-#
-#     lstm = layers.LSTM(128)(concat_embed)
-#
-#     dense = layers.Dense(256, activation='relu')(lstm)
-#     dropout = layers.Dropout(0.5)(dense)
-#     pred = layers.Dense(1, activation='sigmoid')(dropout)
-#     model = Model(inputs=[input_action, extra_input], outputs=[pred])
-#
-#     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-#     model.summary()
-#
-#     return model
-
-
 def build_elmo_model():
     input_text = layers.Input(shape=(1,), dtype=tf.string)
     embedding = ElmoEmbeddingLayer()(input_text)
