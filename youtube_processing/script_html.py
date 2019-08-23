@@ -605,14 +605,14 @@ def write_video_times(clip_actions_time):
     csvfile.close()
 
 
-def create_miniclips(PATH_actions_file, PATH_videos, PATH_miniclips):
+def create_miniclips(PATH_actions_file, PATH_videos, PATH_miniclips, PATH_root):
     video_dict = get_actions_time_from_csv(PATH_actions_file)
 
     print("Now resizing the time (3 seconds)")
     resized_video_dict = resize_time_per_action(video_dict, 3)
     clip_actions_time = process_time_per_action(resized_video_dict, video_dict)
 
-    with open('actions_time_FINAL.json', 'w+') as outfile:
+    with open(PATH_root + 'actions_time_FINAL.json', 'w+') as outfile:
         json.dump(clip_actions_time, outfile)
 
     print("Write time per miniclip")

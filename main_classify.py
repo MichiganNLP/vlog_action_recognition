@@ -87,7 +87,6 @@ def call_classify(do_classify, train_data, test_data, val_data, embeddings_index
 
     if "elmo" == do_classify:
         # just elmo embeddings on top of dense layer
-        # TODO: tried to add action, pos, embeddings - not working because of size ..
         list_results, predicted = train_elmo(train_data, test_data, val_data)
 
         method = args.balance

@@ -17,6 +17,12 @@ We provide a [Google Drive folder with the raw miniclips](https://drive.google.c
 A miniclip is a short video clip (maximum 1 min) extracted from a YouTube video. We segment the videos into miniclips in order to ease the annotation process.
 For more details on how the segmentation is performed, see _section 3.1_ in our [paper](https://arxiv.org/abs/1906.04236).
 
+## Videos
+The videos from which the miniclips were created can be found [here](https://drive.google.com/drive/folders/1t3_r0l7ca4FtP60YMTJ7CPBHWYamYtJ5?usp=sharing), together with the __video transcripts__, __titles__ and __youtube-urls__.
+
+*Important*: You can automatically download your __own videos__, __transcripts__ and perform the __text and movement filtering__ by running the code described in the __Youtube processing__ README section.
+
+
 ## Data Format
 The annotations of the miniclips are available at [`data/miniclip_action.json`](data/actions_miniclip.json).
 The JSON file contains a dictionary: the keys represent the miniclips (e.g. "4p1_3mini_5.mp4") and the values represent the (action, label) pairs.
@@ -68,7 +74,7 @@ Please cite the following paper if you find this dataset useful in your research
 
 # Run the code
 
-Some parts of it are still under revision.
+Some small parts of it are still under revision; please let me know here or by e-mail how I can help.
 
 ## Installation
 To download *Stanford-postagger-full-2018-10-16* and all the required libraries.
