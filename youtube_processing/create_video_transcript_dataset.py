@@ -22,8 +22,6 @@ def save_video_names(output_folder_path, list_video_titles, list_video_names):
         os.makedirs(output_folder_path + "/captions/")
 
     list_all = [list_video_names, list_video_titles]
-    print(list_video_names)
-    print(list_video_titles)
     df = pd.DataFrame(list_all)
     df = df.transpose()
     df.columns = ["Video Name", "Video Title"]
