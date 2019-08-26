@@ -18,7 +18,8 @@ A miniclip is a short video clip (maximum 1 min) extracted from a YouTube video.
 For more details on how the segmentation is performed, see _section 3.1_ in our [paper](https://arxiv.org/abs/1906.04236).
 
 ## Videos
-The __video youtube urls__ from which the miniclips were created can be found [here](https://drive.google.com/drive/folders/1t3_r0l7ca4FtP60YMTJ7CPBHWYamYtJ5?usp=sharing), together with the __video transcripts__and __titles__.
+The __video youtube urls__ from which the miniclips were created can be found [here](https://drive.google.com/drive/folders/1t3_r0l7ca4FtP60YMTJ7CPBHWYamYtJ5?usp=sharing), together with the __video transcripts__ and __titles__.
+
 *Important*: You can automatically download your __own videos__, __transcripts__ and perform the __text and movement filtering__ by running the code described in the __Youtube processing__ README section.
 If you still need the raw videos, e-mail me.
 
