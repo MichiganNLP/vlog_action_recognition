@@ -61,7 +61,7 @@ Example format in JSON:
 
 Please cite the following paper if you find this dataset useful in your research:
 
-```tex
+```bibtex
 @inproceedings{ignat2019identifying,
     title = "Identifying Visible Actions in Lifestyle Vlogs",
     author = "Ignat, Oana and Burdick, Laura and Deng, Jia and Mihalcea, Rada",
