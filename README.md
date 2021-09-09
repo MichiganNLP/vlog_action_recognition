@@ -62,15 +62,20 @@ Example format in JSON:
 Please cite the following paper if you find this dataset useful in your research:
 
 ```bibtex
-@inproceedings{ignat2019identifying,
+@inproceedings{ignat-etal-2019-identifying,
     title = "Identifying Visible Actions in Lifestyle Vlogs",
-    author = "Ignat, Oana and Burdick, Laura and Deng, Jia and Mihalcea, Rada",
-    booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = "7",
+    author = "Ignat, Oana  and
+      Burdick, Laura  and
+      Deng, Jia  and
+      Mihalcea, Rada",
+    booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
+    month = jul,
     year = "2019",
     address = "Florence, Italy",
     publisher = "Association for Computational Linguistics",
-}
+    url = "https://aclanthology.org/P19-1643",
+    doi = "10.18653/v1/P19-1643",
+    pages = "6406--6417"
 ```
 
 # Run the code
