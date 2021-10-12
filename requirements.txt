@@ -8,7 +8,7 @@ moviepy==0.2.3.5
 nltk==3.4.5
 np==1.0.2
 numpy==1.16.0
-opencv-python==4.0.0.21
+opencv-python==4.2.0.32
 pandas==0.23.4
 requests==2.21.0
 scikit-learn==0.20.2
