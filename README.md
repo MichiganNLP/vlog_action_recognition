@@ -1,6 +1,6 @@
-# Identifying Visible Actions in Lifestyle Vlogs
+# IfAct: Identifying Visible Actions in Lifestyle Vlogs
 
-This repository contains the dataset and code for our ACL 2019 paper:
+This repository contains the dataset, **IfAct**, and code for our ACL 2019 paper:
 
 [Identifying Visible Actions in Lifestyle Vlogs](https://arxiv.org/abs/1906.04236)
 
