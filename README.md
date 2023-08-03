@@ -12,7 +12,7 @@ This repository contains the dataset, **IfAct**, and code for our ACL 2019 paper
 
 ## Miniclips
 
-We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/file/d/1yi3hsLFyMTVlEo7o1Fo3mbI57elXXnuH/view?usp=sharing).
+We provide a [Google Drive folder with the raw miniclips](https://drive.google.com/drive/folders/1JJApVcu5o_zvtL3M0Y9a1sAiJCVTPQ6z?usp=sharing).
 
 A miniclip is a short video clip (maximum 1 min) extracted from a YouTube video. We segment the videos into miniclips in order to ease the annotation process.
 For more details on how the segmentation is performed, see _section 3.1_ in our [paper](https://arxiv.org/abs/1906.04236).
@@ -25,7 +25,7 @@ If you still need the raw videos, e-mail me.
 
 
 ## Data Format
-The annotations of the miniclips are available at [`data/miniclip_action.json`](data/actions_miniclip.json).
+The annotations of the miniclips are available at [`data/miniclip_action.json`](data/miniclip_actions.json).
 The JSON file contains a dictionary: the keys represent the miniclips (e.g. "4p1_3mini_5.mp4") and the values represent the (action, label) pairs.
 
 The miniclip name is formed by concatenating its YouTube channel, playlist, video and miniclip index. For miniclip "4p1_3mini_5.mp4":
